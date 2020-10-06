@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:myflutter/pages/bean/AtentAddressBean.dart';
-import 'package:amap_base/amap_base.dart';
+import 'package:base_mapview/base_mapview.dart';
 import 'package:myflutter/pages/bean/AdressDataBean.dart';
 import 'package:myflutter/pages/bean/LoginBean.dart';
 import 'package:myflutter/pages/bean/ResponseBean.dart';
@@ -27,7 +27,7 @@ class AtentAddressWidget extends StatefulWidget {
 
 class _AtentAddressWidgetState extends State<AtentAddressWidget> {
   AtentAddressBean _atentAddressBean;
-  AMapController _controller;
+  //AMapController _controller;
   List atendLoctions;
   double long;
   double lat;
@@ -88,37 +88,37 @@ class _AtentAddressWidgetState extends State<AtentAddressWidget> {
               Stack(
                 alignment: Alignment.center,
                 children: <Widget>[
-                  AMapView(
-                    onAMapViewCreated: (controller) {
-                      this._controller = controller;
-                      MarkerOptions markerOption = MarkerOptions(
-                          position: LatLng(lat, long),
-                          icon: "images/2.0x/ico_end_marker.png");
-
-                      this._controller.addMarker(markerOption);
-                    },
-                    amapOptions: AMapOptions(
-                      compassEnabled: false,
-                      mapType: MAP_TYPE_NORMAL,
-                      zoomControlsEnabled: true,
-                      logoPosition: LOGO_POSITION_BOTTOM_CENTER,
-                      camera: CameraPosition(
-                        target: LatLng(lat, long),
-                        zoom:this._zoom,
-                      ),
-                    ),
-                  ),
+//                  AMapView(
+//                    onAMapViewCreated: (controller) {
+//                      this._controller = controller;
+//                      MarkerOptions markerOption = MarkerOptions(
+//                          position: LatLng(lat, long),
+//                          icon: "images/2.0x/ico_end_marker.png");
+//
+//                      this._controller.addMarker(markerOption);
+//                    },
+//                    amapOptions: AMapOptions(
+//                      compassEnabled: false,
+//                      mapType: MAP_TYPE_NORMAL,
+//                      zoomControlsEnabled: true,
+//                      logoPosition: LOGO_POSITION_BOTTOM_CENTER,
+//                      camera: CameraPosition(
+//                        target: LatLng(lat, long),
+//                        zoom:this._zoom,
+//                      ),
+//                    ),
+//                  ),
                   GestureDetector(
                     onTap: () {
-                      if (this._controller != null) {
-                        this._controller.getCenterLatlng().then((latLng) {
-                          this._controller.clearMarkers();
-                          MarkerOptions options = MarkerOptions(
-                              position: latLng,
-                              icon: "images/2.0x/ico_end_marker.png");
-                          this._controller.addMarker(options);
-                        });
-                      }
+//                      if (this._controller != null) {
+//                        this._controller.getCenterLatlng().then((latLng) {
+//                          this._controller.clearMarkers();
+//                          MarkerOptions options = MarkerOptions(
+//                              position: latLng,
+//                              icon: "images/2.0x/ico_end_marker.png");
+//                          this._controller.addMarker(options);
+//                        });
+//                      }
                     },
                     child: Image.asset("images/ic_red_location.png"),
                   )
@@ -129,14 +129,14 @@ class _AtentAddressWidgetState extends State<AtentAddressWidget> {
                 child: GestureDetector(
                   onTap: () {
                     // print("点击了定位按钮");
-                    this._controller.changeLatLng(LatLng(lat, long));
-                    this._controller.clearMarkers();
-                    MarkerOptions options = MarkerOptions(
-                        position: LatLng(lat, long),
-                        icon: "images/2.0x/ico_end_marker.png");
-
-                    this._controller.addMarker(options);
-                    this._controller.setZoomLevel(int.parse("$_zoom"));
+//                    this._controller.changeLatLng(LatLng(lat, long));
+//                    this._controller.clearMarkers();
+//                    MarkerOptions options = MarkerOptions(
+//                        position: LatLng(lat, long),
+//                        icon: "images/2.0x/ico_end_marker.png");
+//
+//                    this._controller.addMarker(options);
+//                    this._controller.setZoomLevel(int.parse("$_zoom"));
                   },
                   child: Image.asset(
                     "images/locaiton1.png",
@@ -225,17 +225,17 @@ class _AtentAddressWidgetState extends State<AtentAddressWidget> {
   }
 
   _updateAddressDialog(String target, String location) async {
-    if (location != "0") {
-      LatLng latLng = await this._controller.getCenterLatlng();
-      location = "${latLng.longitude},${latLng.latitude}";
-
-      if (this._controller != null) {
-        this._controller.clearMarkers();
-        MarkerOptions option = MarkerOptions(
-            position: latLng, icon: "images/2.0x/ico_end_marker.png");
-        this._controller.addMarker(option);
-      }
-    }
+//    if (location != "0") {
+//      LatLng latLng = await this._controller.getCenterLatlng();
+//      location = "${latLng.longitude},${latLng.latitude}";
+//
+//      if (this._controller != null) {
+//        this._controller.clearMarkers();
+//        MarkerOptions option = MarkerOptions(
+//            position: latLng, icon: "images/2.0x/ico_end_marker.png");
+//        this._controller.addMarker(option);
+//      }
+//    }
 
     LoginBean loginBean = await LoginUtil.getLoginBean();
 

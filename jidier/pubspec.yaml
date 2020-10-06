@@ -32,7 +32,7 @@ dependencies:
   # 添加sharedPreference依赖
   shared_preferences: ^0.5.0
   flutter_webview_plugin: ^0.3.8
-  flutter_cupertino_date_picker: ^1.0.12
+  flutter_cupertino_date_picker: ^1.0.26+2
   date_format: ^1.0.8
   #添加刷新控件
   pull_to_refresh: ^1.5.7
@@ -53,6 +53,7 @@ dependencies:
   #保存图片到相册插件
   image_picker_saver: ^0.3.0
   #amap_base: ^0.3.5
+  base_mapview: ^0.0.6
   permission_handler: ^4.0.0
   flutter_qr_reader: ^1.0.3
   flutter_native_image: ^0.0.4
@@ -61,11 +62,16 @@ dependencies:
   sensors: ^0.4.0+1
   audioplayers: ^0.13.1
   wave_progress_bars: ^0.1.0
-  mobsms: ^1.1.0
+  mobsms:
+  #地图插件
+  amap_map_fluttify: ^0.29.0
+  #定位插件
+  location: ^3.0.2
+  #高德地图搜索插件
+  amap_search_fluttify: ^0.14.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -75,77 +81,77 @@ flutter:
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
-  uses-material-design: true
-aasets:
-  - images/main_title.png
-  - images/ic_time_out.png
-  - images/ic_my_head.png
-  - images/ic_head_blue.png
-  - images/ic_foot_step.png
-  - images/ic_phone.png
-  - images/ic_password.png
-  - images/ic_show_pwd_gray.png
-  - images/ic_hide_pwd_gray.png
-  - images/ic_identify.png
-  - images/ic_wechat.png
-  - images/ic_no_data.png
-  - images/ic_del.png
-  - images/ic_arrow_navigathion.png
-  - images/ic_order_photo.png
-  - images/no_banner.png
-  - images/change_content.png
-  - images/ic_currect.png
-  - images/ic_button_erweima.png
-  - images/ic_blue_merge.png
-  - images/ic_gray_merge.png
-  - images/ic_closed.png
-  - images/ic_gaode.png
-  - images/ic_baidu.png
-  - images/ic_tengxun.png
-  - images/ic_goole.png
-  - images/ic_blue_navigation.png
-  - images/ic_amplify.png
-  - images/ic_question.png
-  - images/jidier_erweima.png
-  - images/ic_qq.png
-  - images/ic_wei_chat.png
-  - images/ic_zhifubao.png
-  - images/mark_adress.png
-  - images/locaiton1.png
-  - images/map_bottom.png
-  - images/ic_red_location.png
-  - images/ico_end_marker.png
-  - images/ic_scan_erweima.png
-  - images/ic_ji.png
-  - images/ic_shorter.png
-  - images/ios_ico.png
-  - images/ico_packing.png
-  - images/ico_no_data.png
-  - images/address_record1.png
-  - images/ico_way_planting.png
-  - images/ico_eye.png
-  - images/ico_history_plan.png
-  - images/ico_location.png
-  - images/ico_start.png
-  - images/ico_end.png
-  - images/ico_green_location.png
-  - images/ico_red_location.png
-  - images/ico_contacts.png
-  - images/ic_contact_pic.png
-  - images/ic_speak_gray.png
-  - images/ic_speak_red.png
-  - images/ico_setting.png
-  - images/ic_blue_message.png
-  - images/ic_system_notice.png
-  - images/ico_version.png
-  - images/ic_shake_gry.png
-  - images/ic_shake_red.png
-  - images/ic_speaker.png
-  - assets/start.mp3
-  - assets/faild.mp3
-  - assets/firstlogin.mp3
-  - assets/nolocation.mp3
-  - assets/successful.mp3
+ uses-material-design: true
+ assets:
+   - images/main_title.png
+   - images/ic_time_out.png
+   - images/ic_my_head.png
+   - images/ic_head_blue.png
+   - images/ic_foot_step.png
+   - images/ic_phone.png
+   - images/ic_password.png
+   - images/ic_show_pwd_gray.png
+   - images/ic_hide_pwd_gray.png
+   - images/ic_identify.png
+   - images/ic_wechat.png
+   - images/ic_no_data.png
+   - images/ic_del.png
+   - images/ic_arrow_navigathion.png
+   - images/ic_order_photo.png
+   - images/no_banner.png
+   - images/change_content.png
+   - images/ic_currect.png
+   - images/ic_button_erweima.png
+   - images/ic_blue_merge.png
+   - images/ic_gray_merge.png
+   - images/ic_closed.png
+   - images/ic_gaode.png
+   - images/ic_baidu.png
+   - images/ic_tengxun.png
+   - images/ic_goole.png
+   - images/ic_blue_navigation.png
+   - images/ic_amplify.png
+   - images/ic_question.png
+   - images/jidier_erweima.png
+   - images/ic_qq.png
+   - images/ic_wei_chat.png
+   - images/ic_zhifubao.png
+   - images/mark_adress.png
+   - images/locaiton1.png
+   - images/map_bottom.png
+   - images/ico_red_location.png
+   - images/ico_end_marker.png
+   - images/ic_scan_erweima.png
+   - images/ic_ji.png
+   - images/ic_shorter.png
+   - images/ios_ico.png
+   - images/ico_packing.png
+   - images/ico_no_data.png
+   - images/address_record1.png
+   - images/ico_way_planting.png
+   - images/ico_eye.png
+   - images/ico_history_plan.png
+   - images/ico_location.png
+   - images/ico_start.png
+   - images/ico_end.png
+   - images/ico_green_location.png
+   - images/ic_red_location.png
+   - images/ico_contacts.png
+   - images/ic_contact_pic.png
+   - images/ic_speak_gray.png
+   - images/ic_speak_red.png
+   - images/ico_setting.png
+   - images/ic_blue_message.png
+   - images/ic_system_notice.png
+   - images/ico_version.png
+   - images/ic_shake_gry.png
+   - images/ic_shake_red.png
+   - images/ic_speaker.png
+   - assets/start.mp3
+   - assets/faild.mp3
+   - assets/firstlogin.mp3
+   - assets/nolocation.mp3
+   - assets/successful.mp3
 
   # To add assets to your application, add an assets section, like this:
   # assets:

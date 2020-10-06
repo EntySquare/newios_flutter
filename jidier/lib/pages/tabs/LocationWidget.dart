@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-
-import 'package:amap_base/amap_base.dart';
+import 'package:amap_map_fluttify/amap_map_fluttify.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,14 +9,11 @@ import 'package:myflutter/pages/bean/AmbitusAdressBean.dart';
 import 'package:myflutter/pages/bean/FindAdrBean.dart';
 import 'package:myflutter/pages/bean/LoginBean.dart';
 import 'package:myflutter/pages/bean/NetAddressBean.dart';
-import 'package:myflutter/pages/bean/NowLatLng.dart';
 import 'package:myflutter/pages/bean/ResponseBean.dart';
 import 'package:myflutter/pages/bean/ResponseBean2.dart';
 import 'package:myflutter/pages/dialog/NetLoadingDialog.dart';
 import 'package:myflutter/pages/dialog/NetLoadingDialog3.dart';
-import 'package:myflutter/pages/dialog/clear_screening_dialog.dart';
 import 'package:myflutter/pages/dialog/mc_notice_dialog.dart';
-import 'package:myflutter/pages/dialog/notice_dialog.dart';
 import 'package:myflutter/pages/dialog/packing_dialog.dart';
 import 'package:myflutter/pages/dialog/record_address_dialog.dart';
 import 'package:myflutter/pages/dialog/record_sucessful_dialog.dart';
@@ -29,16 +25,14 @@ import 'package:myflutter/pages/util/HttpContent.dart';
 import 'package:myflutter/pages/util/LocationDataUtil.dart';
 import 'package:myflutter/pages/util/LoginUtil.dart';
 import 'package:myflutter/pages/util/NetUtil.dart';
-import 'package:myflutter/pages/util/StringUtil.dart';
-import 'package:myflutter/pages/util/SystemUtil.dart';
-import 'package:myflutter/pages/util/Toast.dart';
-import 'package:permission_handler/permission_handler.dart';
-
-import 'NowLocation.dart';
-import 'package:sensors/sensors.dart';
-import 'package:myflutter/pages/util/SharedPreferencesUtil.dart';
 import 'package:myflutter/pages/util/PlayUtil.dart';
-
+import 'package:myflutter/pages/util/SharedPreferencesUtil.dart';
+import 'package:myflutter/pages/util/StringUtil.dart';
+import 'package:myflutter/pages/util/Toast.dart';
+import 'package:permission_handler/permission_handler.dart' as mypermission;
+import 'package:sensors/sensors.dart';
+import 'NowLocation.dart';
+import 'package:location/location.dart'as mylocation;
 class LocationWidget extends StatefulWidget {
   Function mm;
   static _locationWidgetState locationWidgetState;
@@ -57,18 +51,21 @@ class _locationWidgetState extends State<LocationWidget>
     with AutomaticKeepAliveClientMixin {
   Function mm1;
   String _phone = "";
-  AMapController _controller;
+
+  // AMapController _controller;
+  AmapController _controller;
   LeftSideWidget _leftSideWidget;
   double lat = 0;
   double lng = 0;
   bool ifFirstIn = true;
   bool isCanShake = false;
   bool isHasSound = true;
-  final _amapLoction = AMapLocation(); //定位
+
+  //final _amapLoction = AMapLocation(); //定位
   EventChannel _eventChannel;
   String strParkingNotice = "当\n前\n位\n置\n一\n千\n米\n内\n停\n车\n场";
   int _messageNum = 0;
-
+   List<Marker> markers= List<Marker>();
   _locationWidgetState(this.mm1) {
     _leftSideWidget = new LeftSideWidget(
       phone: this._phone,
@@ -176,62 +173,82 @@ class _locationWidgetState extends State<LocationWidget>
   @override
   /*定位 获取当前位置*/
   _getLocation() async {
-    _amapLoction.init();
-    final options = LocationClientOptions(
-        isOnceLocation: false, locatingWithReGeocode: true, interval: 4000);
-    _amapLoction.startLocate(options).listen((location) {
-      LocationDataUtil.nowlocation = NowLocation();
-      LocationDataUtil.nowlocation.lat = location.latitude;
-      LocationDataUtil.nowlocation.lng = location.longitude;
-      LocationDataUtil.nowlocation.city = location.city;
-      double mylat = location.latitude;
-      double mylng = location.longitude;
-      String city = location.city;
-      NowLatLng.lat = mylat;
-      NowLatLng.lng = mylng;
-      NowLatLng.city = city;
-      // print("定位数据$lat====$lng");
-      if (mylat > 0 && mylng > 0) {
-        checkPersmission(mylat, mylng);
-      } else {
-        Toast.toast(context, msg: "获取位置失败，请检测GPS是否开启!");
-      }
-    });
-  }
-
-//是否开启权限
-  void checkPersmission(double lat, double lng) async {
-    // 申请权限
-    Map<PermissionGroup, PermissionStatus> permissions =
-        await PermissionHandler()
-            .requestPermissions([PermissionGroup.location]);
-    // 申请结果
-    PermissionStatus permission = await PermissionHandler()
-        .checkPermissionStatus(PermissionGroup.location);
-    if (permission == PermissionStatus.granted) {
-      AMap.init('30451939c0a123dfb05d9ae6b7c00b1f');
-      // print("定位数据$lat====$lng");
-      this.lat = lat;
-      this.lng = lng;
-      if (this._controller != null) {
-        this._controller.clearMarkers();
-
-        MarkerOptions options = MarkerOptions(
-            position: LatLng(lat, lng),
-            icon: "images/2.0x/ic_red_location.png");
-        this
-            ._controller
-            .addMarkers([options], moveToCenter: false, clear: true);
-        if (this.ifFirstIn) {
-          this._controller.changeLatLng(LatLng(lat, lng));
-          this._controller.setZoomLevel(17);
-          this.ifFirstIn = false;
+    if (await requestPermission()) {
+      // final location = await AmapLocation.instance.fetchLocation();
+      // print('==========');
+      // this._controller.toScreenLocation(location.latLng);
+      var location=  new mylocation.Location();
+      bool _serviceEnabled;
+      _serviceEnabled = await location.serviceEnabled();
+      if (!_serviceEnabled) {
+        _serviceEnabled = await location.requestService();
+        if (!_serviceEnabled) {
+          return;
         }
       }
+      var locationData= await location.getLocation();
+      this.lat=locationData.latitude;
+      this.lng=locationData.longitude;
+      await this._controller.setCenterCoordinate(LatLng(lat,lng));
+      await this._controller.setZoomLevel(17);
+      location.onLocationChanged.listen((mylocation.LocationData currentLocation) async {
+        this.lat=currentLocation.latitude;
+        this.lng=currentLocation.longitude;
+         this._controller.clearMarkers(markers);
+          markers.clear();
+        this._controller.addMarker(MarkerOption(latLng:LatLng(lat,lng),iconProvider:AssetImage('images/ico_red_location.png')))
+            .then((marker) =>markers.add(marker));
+      });
+      //print('==========');
+     // this._controller.toScreenLocation(LatLng(locationData.latitude,locationData.longitude));
+     //   setState(() {
+     //     this.lat=locationData.latitude;
+     //     this.lng=locationData.longitude;
+     //   });
+    }
+
+    // await AMapLocationClient.startup(new AMapLocationOption( desiredAccuracy:CLLocationAccuracy.kCLLocationAccuracyHundredMeters  ));
+    // await AMapLocationClient.getLocation(true);
+    // AMapLocationClient.onLocationUpate.listen((AMapLocation loc){
+    //   var latlng= LatLng(loc.latitude,loc.longitude);
+    //   this._controller.toScreenLocation(latlng);
+    // });
+    // AMapLocationClient.startLocation();
+//    _amapLoction.init();
+//    final options = LocationClientOptions(
+//        isOnceLocation: false, locatingWithReGeocode: true, interval: 4000);
+//    _amapLoction.startLocate(options).listen((location) {
+//      LocationDataUtil.nowlocation = NowLocation();
+//      LocationDataUtil.nowlocation.lat = location.latitude;
+//      LocationDataUtil.nowlocation.lng = location.longitude;
+//      LocationDataUtil.nowlocation.city = location.city;
+//      double mylat = location.latitude;
+//      double mylng = location.longitude;
+//      String city = location.city;
+//      NowLatLng.lat = mylat;
+//      NowLatLng.lng = mylng;
+//      NowLatLng.city = city;
+//      // print("定位数据$lat====$lng");
+//      if (mylat > 0 && mylng > 0) {
+//        checkPersmission(mylat, mylng);
+//      } else {
+//        Toast.toast(context, msg: "获取位置失败，请检测GPS是否开启!");
+//      }
+//    });
+  }
+
+  Future<bool> requestPermission() async {
+    final permissions = await mypermission.PermissionHandler()
+        .requestPermissions([mypermission.PermissionGroup.location]);
+
+    if (permissions[mypermission.PermissionGroup.location] ==mypermission.PermissionStatus.granted) {
+      return true;
     } else {
-      Toast.toast(context, msg: "请打开GPS和允许定位权限");
+      Toast.toast(context, msg: '需要定位权限');
+      return false;
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -432,21 +449,29 @@ class _locationWidgetState extends State<LocationWidget>
               Stack(
                 alignment: Alignment.center,
                 children: <Widget>[
-                  AMapView(
-                    onAMapViewCreated: (controller) {
+                  AmapView(
+                    onMapCreated: (controller) async {
                       this._controller = controller;
+                      await this._controller.showCompass(false);
+                      await this._controller.setZoomLevel(17);
                     },
-                    amapOptions: AMapOptions(
-                      compassEnabled: false,
-                      mapType: MAP_TYPE_NORMAL,
-                      zoomControlsEnabled: true,
-                      logoPosition: LOGO_POSITION_BOTTOM_CENTER,
-//                      camera: CameraPosition(
-//                        target: LatLng(lat,lng),
-//                        zoom: 17,
-//                      ),
-                    ),
-                  ),
+                  )
+
+//                  AMapView(
+//                    onAMapViewCreated: (controller) {
+//                      this._controller = controller;
+//                    },
+//                    amapOptions: AMapOptions(
+// //                      compassEnabled: false,
+// //                      mapType: MAP_TYPE_NORMAL,
+// //                      zoomControlsEnabled: true,
+// //                      logoPosition: LOGO_POSITION_BOTTOM_CENTER,
+// ////                      camera: CameraPosition(
+// ////                        target: LatLng(lat,lng),
+// ////                        zoom: 17,
+// ////                      ),
+//                    ),
+//                  ),
 //                  GestureDetector(
 //                    onTap: () {
 //                      if (this._controller != null) {
@@ -466,9 +491,9 @@ class _locationWidgetState extends State<LocationWidget>
               Padding(
                 padding: EdgeInsets.fromLTRB(0.0, 0.0, 30.0, 40.0),
                 child: GestureDetector(
-                  onTap: () {
-                    this._controller.changeLatLng(LatLng(lat, lng));
-                    this._controller.setZoomLevel(17);
+                  onTap: () async {
+                    await this._controller.setCenterCoordinate(LatLng(lat,lng));
+                    await this._controller.setZoomLevel(17);
                   },
                   child: Image.asset(
                     "images/locaiton1.png",
@@ -532,7 +557,7 @@ class _locationWidgetState extends State<LocationWidget>
           ),
         ),
         GestureDetector(
-          onTap: () {
+          onTap: () async{
             //记录地址按钮
             LoginUtil.ifLogin(login: (LoginBean loginBean) {
               // this._showRecordAddressDialog();
@@ -540,6 +565,9 @@ class _locationWidgetState extends State<LocationWidget>
             }, unLogin: (LoginBean loginBean) {
               Navigator.pushNamed(context, "/login");
             });
+
+
+
           },
           child: Image.asset(
             "images/ic_ji.png",
@@ -574,7 +602,8 @@ class _locationWidgetState extends State<LocationWidget>
   @override
   void dispose() {
     // TODO: implement dispose
-    _controller.dispose();
+    // _controller.dispose();
+    // AMapLocationClient.shutdown();
     PlayUtil.playRealse();
     super.dispose();
   }
@@ -992,18 +1021,18 @@ class _locationWidgetState extends State<LocationWidget>
   /*跳转到搜索地址记录界面*/
   _jumpSearchMapWidget() {
     LoginUtil.ifLogin(login: (LoginBean loginBean) {
-      LatLng jumpLatLng = LatLng(this.lat, this.lng);
-      Navigator.pushNamed(context, '/searchMapWidget', arguments: jumpLatLng)
-          .then((state) {
-        switch (state) {
-          case 0:
-            this.mm1(0);
-            break;
-          case 1:
-            this.mm1(1);
-            break;
-        }
-      });
+      //LatLng jumpLatLng = LatLng(this.lat, this.lng);
+//      Navigator.pushNamed(context, '/searchMapWidget', arguments: jumpLatLng)
+//          .then((state) {
+//        switch (state) {
+//          case 0:
+//            this.mm1(0);
+//            break;
+//          case 1:
+//            this.mm1(1);
+//            break;
+//        }
+//      });
     }, unLogin: (LoginBean loginBean) {
       Navigator.pushNamed(context, "/login");
     });

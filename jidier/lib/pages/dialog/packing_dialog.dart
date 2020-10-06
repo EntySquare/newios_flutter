@@ -25,11 +25,12 @@ class _PackingDialogState extends State<PackingDialog> {
 
   _PackingDialogState(ResponseData responseData) {
     this._responseData = responseData;
+    this._search(this._responseData.lat, this._responseData.longs);
   }
 
   @override
   Widget build(BuildContext context) {
-    this._search(this._responseData.lat, this._responseData.longs);
+    //this._search(this._responseData.lat, this._responseData.longs);
     return GestureDetector(
       onTap: () {
         Navigator.pop(context);

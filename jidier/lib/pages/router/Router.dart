@@ -52,7 +52,7 @@ final routers = {
       ),
   '/qrScanWidget': (context, {arguments}) => QrScanWidget(),
   '/searchMapWidget': (context, {arguments}) => SearchMapWidget(
-        latLng: arguments,
+       // latLng: arguments,
       ),
   '/searchContentWidget': (context, {arguments}) => SearchContentWidget(),
   '/navigationHistory': (context, {arguments}) => NavigationHistoryWidget(),

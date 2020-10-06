@@ -1,3 +1,6 @@
+//import 'package:amap_location/amap_location.dart';
+import 'package:amap_map_fluttify/amap_map_fluttify.dart';
+import 'package:amap_location_fluttify/amap_location_fluttify.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,13 +12,19 @@ import 'package:myflutter/pages/util/ContactsUtil.dart';
 import 'package:myflutter/pages/util/HttpContent.dart';
 import 'package:myflutter/pages/util/LoginUtil.dart';
 
-void main() {
+Future<void> main() async {
   runApp(MyApp());
+  await enableFluttifyLog(false);
+  await AmapService.instance.init(
+      iosKey: '30451939c0a123dfb05d9ae6b7c00b1f',
+      androidKey: 'c409d30dd9625529f6317632d8c48dff');
+
 }
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   static const platform = const MethodChannel("jidier");
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
@@ -64,15 +73,15 @@ class _myBottomBarWidgetState extends State<myBottomBarWidget>
       case AppLifecycleState.inactive: //处于这种状态的应用程序应该假设他们可能再任何时候暂停
         break;
       case AppLifecycleState.resumed: //应用程序可见，前台
-      // TODO: Handle this case.
+        // TODO: Handle this case.
         break;
       case AppLifecycleState.paused: //应用程序不可见，后台
-      // TODO: Handle this case.
+        // TODO: Handle this case.
         _netUploadLunchNum();
         break;
-    //case AppLifecycleState.suspending: //申请将暂时暂停
-    // TODO: Handle this case.
-    // break;
+      //case AppLifecycleState.suspending: //申请将暂时暂停
+      // TODO: Handle this case.
+      // break;
     }
   }
 

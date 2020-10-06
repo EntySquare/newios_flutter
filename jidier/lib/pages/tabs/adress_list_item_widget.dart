@@ -40,7 +40,7 @@ Widget getListItem(int index, ResponseData responseData, callBack, context) {
                       alignment: Alignment.center,
                       child: Text(
                         responseData.kind,
-                        style: TextStyle(fontSize: 26.0, color: Colors.black),
+                        style: TextStyle(fontSize: 18.0, color: Colors.black),
                         textScaleFactor: 1,
                       ),
                     ),

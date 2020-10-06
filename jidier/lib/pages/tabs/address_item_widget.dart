@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
+//import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:myflutter/pages/bean/AdressDataBean.dart';
 import 'package:myflutter/pages/bean/AsKindBean.dart';
 import 'package:myflutter/pages/bean/AtentAddressBean.dart';
@@ -415,36 +415,36 @@ class _AddressItemWidgetState extends State<AddressItemWidget>
   }
 
   void showSartDatePiker() {
-    DatePicker.showDatePicker(context,
-        maxDateTime: this._dateEndTime ?? DateTime.now(),
-        initialDateTime: this._dateEndTime ?? DateTime.now(),
-        dateFormat: "yyyy-MM-dd",
-        pickerTheme: DateTimePickerTheme(
-          itemTextStyle: TextStyle(
-              fontSize: 16, color: Colors.black, fontWeight: FontWeight.bold),
-          cancel: Text(
-            "取消",
-            style: TextStyle(
-                color: Colors.black,
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold),
-          ),
-          confirm: Text(
-            "确定",
-            style: TextStyle(
-                color: Color(0xff009898),
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold),
-          ),
-        ), onConfirm: (DateTime selectTime, List<int> selectList) {
-      setState(() {
-        this._dateStartTime = selectTime;
-      });
-
-      this._page = 1;
-      this.data.clear();
-      this.initAddressList();
-    });
+//    DatePicker.showDatePicker(context,
+//        maxDateTime: this._dateEndTime ?? DateTime.now(),
+//        initialDateTime: this._dateEndTime ?? DateTime.now(),
+//        dateFormat: "yyyy-MM-dd",
+//        pickerTheme: DateTimePickerTheme(
+//          itemTextStyle: TextStyle(
+//              fontSize: 16, color: Colors.black, fontWeight: FontWeight.bold),
+//          cancel: Text(
+//            "取消",
+//            style: TextStyle(
+//                color: Colors.black,
+//                fontSize: 18.0,
+//                fontWeight: FontWeight.bold),
+//          ),
+//          confirm: Text(
+//            "确定",
+//            style: TextStyle(
+//                color: Color(0xff009898),
+//                fontSize: 18.0,
+//                fontWeight: FontWeight.bold),
+//          ),
+//        ), onConfirm: (DateTime selectTime, List<int> selectList) {
+//      setState(() {
+//        this._dateStartTime = selectTime;
+//      });
+//
+//      this._page = 1;
+//      this.data.clear();
+//      this.initAddressList();
+//    });
   }
 
   String dateTimeToString(DateTime dateTime) {
@@ -456,41 +456,41 @@ class _AddressItemWidgetState extends State<AddressItemWidget>
   }
 
   void showEndDatePiker() {
-    if (this._dateStartTime == null) {
-      Toast.toast(context, msg: "请选择开始时间");
-      return;
-    }
-
-    DatePicker.showDatePicker(context,
-        maxDateTime: DateTime.now(),
-        minDateTime: this._dateStartTime,
-        initialDateTime: DateTime.now(),
-        dateFormat: "yyyy-MM-dd",
-        pickerTheme: DateTimePickerTheme(
-          itemTextStyle: TextStyle(
-              fontSize: 16, color: Colors.black, fontWeight: FontWeight.bold),
-          cancel: Text(
-            "取消",
-            style: TextStyle(
-                color: Colors.black,
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold),
-          ),
-          confirm: Text(
-            "确定",
-            style: TextStyle(
-                color: Color(0xff009898),
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold),
-          ),
-        ), onConfirm: (DateTime selectTime, List<int> selectList) {
-      setState(() {
-        this._dateEndTime = selectTime;
-      });
-      this._page = 1;
-      this.data.clear();
-      this.initAddressList();
-    });
+//    if (this._dateStartTime == null) {
+//      Toast.toast(context, msg: "请选择开始时间");
+//      return;
+//    }
+//
+//    DatePicker.showDatePicker(context,
+//        maxDateTime: DateTime.now(),
+//        minDateTime: this._dateStartTime,
+//        initialDateTime: DateTime.now(),
+//        dateFormat: "yyyy-MM-dd",
+//        pickerTheme: DateTimePickerTheme(
+//          itemTextStyle: TextStyle(
+//              fontSize: 16, color: Colors.black, fontWeight: FontWeight.bold),
+//          cancel: Text(
+//            "取消",
+//            style: TextStyle(
+//                color: Colors.black,
+//                fontSize: 18.0,
+//                fontWeight: FontWeight.bold),
+//          ),
+//          confirm: Text(
+//            "确定",
+//            style: TextStyle(
+//                color: Color(0xff009898),
+//                fontSize: 18.0,
+//                fontWeight: FontWeight.bold),
+//          ),
+//        ), onConfirm: (DateTime selectTime, List<int> selectList) {
+//      setState(() {
+//        this._dateEndTime = selectTime;
+//      });
+//      this._page = 1;
+//      this.data.clear();
+//      this.initAddressList();
+//    });
   }
 
   /*初始化地址列表*/
