@@ -9,6 +9,7 @@ import 'package:myflutter/pages/bean/AmbitusAdressBean.dart';
 import 'package:myflutter/pages/bean/FindAdrBean.dart';
 import 'package:myflutter/pages/bean/LoginBean.dart';
 import 'package:myflutter/pages/bean/NetAddressBean.dart';
+import 'package:myflutter/pages/bean/NowLatLng.dart';
 import 'package:myflutter/pages/bean/ResponseBean.dart';
 import 'package:myflutter/pages/bean/ResponseBean2.dart';
 import 'package:myflutter/pages/dialog/NetLoadingDialog.dart';
@@ -189,11 +190,14 @@ class _locationWidgetState extends State<LocationWidget>
       var locationData= await location.getLocation();
       this.lat=locationData.latitude;
       this.lng=locationData.longitude;
+
       await this._controller.setCenterCoordinate(LatLng(lat,lng));
       await this._controller.setZoomLevel(17);
       location.onLocationChanged.listen((mylocation.LocationData currentLocation) async {
         this.lat=currentLocation.latitude;
         this.lng=currentLocation.longitude;
+        NowLatLng.lat=currentLocation.latitude;
+        NowLatLng.lng=currentLocation.longitude;
          this._controller.clearMarkers(markers);
           markers.clear();
         this._controller.addMarker(MarkerOption(latLng:LatLng(lat,lng),iconProvider:AssetImage('images/ico_red_location.png')))
