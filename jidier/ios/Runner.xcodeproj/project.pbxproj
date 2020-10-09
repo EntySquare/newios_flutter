@@ -14,6 +14,10 @@
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		ABB600B97DD4F153C40500C7 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 555246F60360395A9A4BB4B7 /* Pods_Runner.framework */; };
+		DDAC739D252FFD8000DB49CD /* iflyMSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDAC739C252FFD8000DB49CD /* iflyMSC.framework */; };
+		DDAC73AC252FFDBC00DB49CD /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DDAC73A2252FFDBB00DB49CD /* libc++.tbd */; };
+		DDAC73AD252FFDBC00DB49CD /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DDAC73A1252FFDBB00DB49CD /* libz.tbd */; };
+		DDAC73B0253000C300DB49CD /* SpeakerUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = DDAC73AF253000C300DB49CD /* SpeakerUtil.m */; };
 		DDC17F65252DC2A4000B747E /* NavigationTool.m in Sources */ = {isa = PBXBuildFile; fileRef = DDC17F64252DC2A4000B747E /* NavigationTool.m */; };
 /* End PBXBuildFile section */
 
@@ -48,6 +52,23 @@
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B6F4710E671649EC15EC6E38 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
+		DDAC739C252FFD8000DB49CD /* iflyMSC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = iflyMSC.framework; sourceTree = "<group>"; };
+		DDAC739E252FFDBB00DB49CD /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		DDAC739F252FFDBB00DB49CD /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		DDAC73A0252FFDBB00DB49CD /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		DDAC73A1252FFDBB00DB49CD /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		DDAC73A2252FFDBB00DB49CD /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		DDAC73A3252FFDBB00DB49CD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		DDAC73A4252FFDBC00DB49CD /* Contacts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Contacts.framework; path = System/Library/Frameworks/Contacts.framework; sourceTree = SDKROOT; };
+		DDAC73A5252FFDBC00DB49CD /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		DDAC73A6252FFDBC00DB49CD /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		DDAC73A7252FFDBC00DB49CD /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		DDAC73A8252FFDBC00DB49CD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		DDAC73A9252FFDBC00DB49CD /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		DDAC73AA252FFDBC00DB49CD /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		DDAC73AB252FFDBC00DB49CD /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
+		DDAC73AE253000C300DB49CD /* SpeakerUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpeakerUtil.h; sourceTree = "<group>"; };
+		DDAC73AF253000C300DB49CD /* SpeakerUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpeakerUtil.m; sourceTree = "<group>"; };
 		DDC17F63252DC298000B747E /* NavigationTool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NavigationTool.h; sourceTree = "<group>"; };
 		DDC17F64252DC2A4000B747E /* NavigationTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigationTool.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -57,6 +78,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DDAC73AC252FFDBC00DB49CD /* libc++.tbd in Frameworks */,
+				DDAC73AD252FFDBC00DB49CD /* libz.tbd in Frameworks */,
+				DDAC739D252FFD8000DB49CD /* iflyMSC.framework in Frameworks */,
 				ABB600B97DD4F153C40500C7 /* Pods_Runner.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -98,6 +122,8 @@
 			isa = PBXGroup;
 			children = (
 				74858FAE1ED2DC5600515810 /* AppDelegate.swift */,
+				DDAC73AE253000C300DB49CD /* SpeakerUtil.h */,
+				DDAC73AF253000C300DB49CD /* SpeakerUtil.m */,
 				DDC17F63252DC298000B747E /* NavigationTool.h */,
 				DDC17F64252DC2A4000B747E /* NavigationTool.m */,
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
@@ -124,6 +150,21 @@
 		E96C08A893942ACFE77F70B4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DDAC73A0252FFDBB00DB49CD /* AddressBook.framework */,
+				DDAC739E252FFDBB00DB49CD /* AudioToolbox.framework */,
+				DDAC73AB252FFDBC00DB49CD /* AuthenticationServices.framework */,
+				DDAC73A6252FFDBC00DB49CD /* AVFoundation.framework */,
+				DDAC73A4252FFDBC00DB49CD /* Contacts.framework */,
+				DDAC73A5252FFDBC00DB49CD /* CoreGraphics.framework */,
+				DDAC73A9252FFDBC00DB49CD /* CoreLocation.framework */,
+				DDAC739F252FFDBB00DB49CD /* CoreTelephony.framework */,
+				DDAC73A3252FFDBB00DB49CD /* Foundation.framework */,
+				DDAC73A2252FFDBB00DB49CD /* libc++.tbd */,
+				DDAC73A1252FFDBB00DB49CD /* libz.tbd */,
+				DDAC73A8252FFDBC00DB49CD /* QuartzCore.framework */,
+				DDAC73AA252FFDBC00DB49CD /* SystemConfiguration.framework */,
+				DDAC73A7252FFDBC00DB49CD /* UIKit.framework */,
+				DDAC739C252FFD8000DB49CD /* iflyMSC.framework */,
 				555246F60360395A9A4BB4B7 /* Pods_Runner.framework */,
 			);
 			name = Frameworks;
@@ -295,6 +336,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DDC17F65252DC2A4000B747E /* NavigationTool.m in Sources */,
+				DDAC73B0253000C300DB49CD /* SpeakerUtil.m in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
 			);
@@ -384,6 +426,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -521,6 +564,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -552,6 +596,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

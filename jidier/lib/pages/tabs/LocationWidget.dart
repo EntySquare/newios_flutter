@@ -81,6 +81,8 @@ class _locationWidgetState extends State<LocationWidget>
         }
       },
     );
+    lat= NowLatLng.lat;
+    lng= NowLatLng.lng;
   }
 
   @override
@@ -88,7 +90,7 @@ class _locationWidgetState extends State<LocationWidget>
     // TODO: implement initState
     _eventChannel = EventChannel('mc');
     // AMap.init('30451939c0a123dfb05d9ae6b7c00b1f');
-    this._getLocation();
+   // this._getLocation();
     _eventChannel.receiveBroadcastStream().listen((msg) {
       if (msg == null) {
         String content = "0";
@@ -170,15 +172,12 @@ class _locationWidgetState extends State<LocationWidget>
     });
     super.initState();
   }
-
+  var locationData;
+  var location=  new mylocation.Location();
   @override
   /*定位 获取当前位置*/
-  _getLocation() async {
+  getLocation() async {
     if (await requestPermission()) {
-      // final location = await AmapLocation.instance.fetchLocation();
-      // print('==========');
-      // this._controller.toScreenLocation(location.latLng);
-      var location=  new mylocation.Location();
       bool _serviceEnabled;
       _serviceEnabled = await location.serviceEnabled();
       if (!_serviceEnabled) {
@@ -187,10 +186,11 @@ class _locationWidgetState extends State<LocationWidget>
           return;
         }
       }
-      var locationData= await location.getLocation();
-      this.lat=locationData.latitude;
-      this.lng=locationData.longitude;
-
+      if(locationData==null){
+       locationData= await location.getLocation();
+       this.lat=locationData.latitude;
+       this.lng=locationData.longitude;
+      }
       await this._controller.setCenterCoordinate(LatLng(lat,lng));
       await this._controller.setZoomLevel(17);
       location.onLocationChanged.listen((mylocation.LocationData currentLocation) async {
@@ -203,43 +203,35 @@ class _locationWidgetState extends State<LocationWidget>
         this._controller.addMarker(MarkerOption(latLng:LatLng(lat,lng),iconProvider:AssetImage('images/ico_red_location.png')))
             .then((marker) =>markers.add(marker));
       });
-      //print('==========');
-     // this._controller.toScreenLocation(LatLng(locationData.latitude,locationData.longitude));
-     //   setState(() {
-     //     this.lat=locationData.latitude;
-     //     this.lng=locationData.longitude;
-     //   });
+
     }
 
-    // await AMapLocationClient.startup(new AMapLocationOption( desiredAccuracy:CLLocationAccuracy.kCLLocationAccuracyHundredMeters  ));
-    // await AMapLocationClient.getLocation(true);
-    // AMapLocationClient.onLocationUpate.listen((AMapLocation loc){
-    //   var latlng= LatLng(loc.latitude,loc.longitude);
-    //   this._controller.toScreenLocation(latlng);
-    // });
-    // AMapLocationClient.startLocation();
-//    _amapLoction.init();
-//    final options = LocationClientOptions(
-//        isOnceLocation: false, locatingWithReGeocode: true, interval: 4000);
-//    _amapLoction.startLocate(options).listen((location) {
-//      LocationDataUtil.nowlocation = NowLocation();
-//      LocationDataUtil.nowlocation.lat = location.latitude;
-//      LocationDataUtil.nowlocation.lng = location.longitude;
-//      LocationDataUtil.nowlocation.city = location.city;
-//      double mylat = location.latitude;
-//      double mylng = location.longitude;
-//      String city = location.city;
-//      NowLatLng.lat = mylat;
-//      NowLatLng.lng = mylng;
-//      NowLatLng.city = city;
-//      // print("定位数据$lat====$lng");
-//      if (mylat > 0 && mylng > 0) {
-//        checkPersmission(mylat, mylng);
-//      } else {
-//        Toast.toast(context, msg: "获取位置失败，请检测GPS是否开启!");
-//      }
-//    });
   }
+  updatePosition1(inLat,inLng) async{
+    this.lat=inLat;
+    this.lng=inLng;
+    await this._controller.setCenterCoordinate(LatLng(lat,lng));
+    await this._controller.setZoomLevel(17);
+    if(LocationDataUtil.nowlocation==null){
+    LocationDataUtil.nowlocation= NowLocation();}
+    LocationDataUtil.nowlocation.lat=this.lat;
+    LocationDataUtil.nowlocation.lng=this.lng;
+  }
+  updatePosition2(inLat,inLng) async{
+    this.lat=inLat;
+    this.lng=inLng;
+    NowLatLng.lat=inLat;
+    NowLatLng.lng=inLng;
+    this._controller.clearMarkers(markers);
+    markers.clear();
+    this._controller.addMarker(MarkerOption(latLng:LatLng(lat,lng),iconProvider:AssetImage('images/ico_red_location.png')))
+        .then((marker) =>markers.add(marker));
+    if(LocationDataUtil.nowlocation==null){
+      LocationDataUtil.nowlocation= NowLocation();}
+    LocationDataUtil.nowlocation.lat=this.lat;
+    LocationDataUtil.nowlocation.lng=this.lng;
+  }
+
 
   Future<bool> requestPermission() async {
     final permissions = await mypermission.PermissionHandler()
@@ -457,7 +449,12 @@ class _locationWidgetState extends State<LocationWidget>
                     onMapCreated: (controller) async {
                       this._controller = controller;
                       await this._controller.showCompass(false);
+                      if(lat!=0){
+                      await this._controller.setCenterCoordinate(LatLng(lat,lng));
                       await this._controller.setZoomLevel(17);
+                     this._controller.addMarker(MarkerOption(latLng:LatLng(lat,lng),iconProvider:AssetImage('images/ico_red_location.png')))
+                          .then((marker) =>markers.add(marker));
+                      }
                     },
                   )
 

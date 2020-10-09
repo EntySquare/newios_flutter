@@ -11,7 +11,9 @@ import 'package:myflutter/pages/tabs/LocationWidget.dart';
 import 'package:myflutter/pages/util/ContactsUtil.dart';
 import 'package:myflutter/pages/util/HttpContent.dart';
 import 'package:myflutter/pages/util/LoginUtil.dart';
-
+import 'package:location/location.dart'as mylocation;
+import 'package:myflutter/pages/util/Toast.dart';
+import 'package:permission_handler/permission_handler.dart' as mypermission;
 Future<void> main() async {
   runApp(MyApp());
   await enableFluttifyLog(false);
@@ -55,6 +57,7 @@ class _myBottomBarWidgetState extends State<myBottomBarWidget>
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _getLocation();
   }
 
   @override
@@ -98,6 +101,8 @@ class _myBottomBarWidgetState extends State<myBottomBarWidget>
       print(e);
     }
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -158,4 +163,52 @@ class _myBottomBarWidgetState extends State<myBottomBarWidget>
       ),
     );
   }
+
+  var locationData;
+  var location=  new mylocation.Location();
+
+  /*定位 获取当前位置*/
+  _getLocation() async {
+    if (await requestPermission()) {
+      bool _serviceEnabled;
+      _serviceEnabled = await location.serviceEnabled();
+      if (!_serviceEnabled) {
+        _serviceEnabled = await location.requestService();
+        if (!_serviceEnabled) {
+          return;
+        }
+      }
+      if(locationData==null){
+        locationData= await location.getLocation();
+        if(LocationWidget.locationWidgetState!=null){
+
+          LocationWidget.locationWidgetState.updatePosition1(locationData.latitude, locationData.longitude);
+
+        }
+      }
+
+      location.onLocationChanged.listen((mylocation.LocationData currentLocation) async {
+        if(LocationWidget.locationWidgetState!=null){
+          LocationWidget.locationWidgetState.updatePosition2(currentLocation.latitude, currentLocation.longitude);
+        }
+      });
+
+    }
+
+  }
+
+  Future<bool> requestPermission() async {
+    final permissions = await mypermission.PermissionHandler()
+        .requestPermissions([mypermission.PermissionGroup.location]);
+
+    if (permissions[mypermission.PermissionGroup.location] ==mypermission.PermissionStatus.granted) {
+      return true;
+    } else {
+      Toast.toast(context, msg: '需要定位权限');
+      return false;
+    }
+  }
+
+
+
 }
