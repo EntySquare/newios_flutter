@@ -1,10 +1,9 @@
-import 'package:base_mapview/base_mapview.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:myflutter/pages/bean/AmbitusAdressBean.dart';
 import 'package:myflutter/pages/bean/LoginBean.dart';
 import 'package:myflutter/pages/bean/NetAddressBean.dart';
+import 'package:myflutter/pages/bean/SelectAddressBean.dart';
 import 'package:myflutter/pages/dialog/NetLoadingDialog3.dart';
 import 'package:myflutter/pages/dialog/navigation_dialog.dart';
 import 'package:myflutter/pages/dialog/record_address_dialog.dart';
@@ -14,38 +13,35 @@ import 'package:myflutter/pages/util/HttpContent.dart';
 import 'package:myflutter/pages/util/LocationDataUtil.dart';
 import 'package:myflutter/pages/util/LoginUtil.dart';
 import 'package:myflutter/pages/util/NetUtil.dart';
+import 'package:myflutter/pages/util/PlayUtil.dart';
+import 'package:myflutter/pages/util/SharedPreferencesUtil.dart';
 import 'package:myflutter/pages/util/SystemUtil.dart';
 import 'package:myflutter/pages/util/Toast.dart';
-import 'package:myflutter/pages/bean/SelectAddressBean.dart';
 import 'package:sensors/sensors.dart';
-import 'package:myflutter/pages/util/SharedPreferencesUtil.dart';
-import 'package:myflutter/pages/util/PlayUtil.dart';
+import 'package:amap_map_fluttify/amap_map_fluttify.dart';
 
 /*搜索地图界面*/
 class SearchMapWidget extends StatefulWidget {
- // LatLng latLng;
+  LatLng latLng;
 
-  SearchMapWidget({Key key}) : super(key: key);
+  SearchMapWidget({Key key, this.latLng}) : super(key: key);
 
   @override
-  _SearchMapWidgetState createState() => _SearchMapWidgetState(
-
-      //latLng
-  );
+  _SearchMapWidgetState createState() => _SearchMapWidgetState(latLng);
 }
 
 class _SearchMapWidgetState extends State<SearchMapWidget> {
-//  LatLng _latLng;
-//  LatLng _newLatLng;
-//  AMapController _controller;
+  LatLng _latLng;
+  LatLng _newLatLng;
+  LatLng _centerLatLng;
+  AmapController _controller;
   String _searchContent = "请输入地址搜索";
   bool isCanShake = false;
   bool isHasSound = true;
+  List<Marker> marks = List();
 
-  _SearchMapWidgetState(
-      //latLng
-      ) {
-   // this._latLng = latLng;
+  _SearchMapWidgetState(latLng) {
+    this._latLng = latLng;
   }
 
   @override
@@ -126,24 +122,24 @@ class _SearchMapWidgetState extends State<SearchMapWidget> {
         if (isHasSound) {
           PlayUtil.playStart("faild.mp3");
         }
-
       } else {
         String mm = response.toString();
         AmbitusAdreesBean ambitusAdressBean =
-        NetUtil.getAmbitusAdressBean(response.toString());
+            NetUtil.getAmbitusAdressBean(response.toString());
         // _showRecordAddressDialog(ambitusAdressBean.regeocode.formattedAddress);
 
         _shakeRecordAddressDialog(ambitusAdressBean.regeocode.formattedAddress);
       }
     });
   }
+
   _shakeRecordAddressDialog(String address) async {
     //LatLng centerLat = await this._controller.getCenterLatlng();
 
     NetAddressBean netAddressBean = NetAddressBean();
     int nowTime = DataUtil.currentTimeMillis();
     netAddressBean.describe =
-    _searchContent == "请输入地址搜索" ? "新建地址$nowTime" : _searchContent;
+        _searchContent == "请输入地址搜索" ? "新建地址$nowTime" : _searchContent;
     netAddressBean.remark = "0";
     netAddressBean.kind = "摇摇记";
     netAddressBean.address = address;
@@ -173,7 +169,7 @@ class _SearchMapWidgetState extends State<SearchMapWidget> {
         }
       } else {
         NetUtil.ifNetSuccessful(response, successfull: (responseBean) {
-           Toast.toast(context, msg: "记录成功");
+          Toast.toast(context, msg: "记录成功");
           if (isHasSound) {
             PlayUtil.playStart("successful.mp3");
           }
@@ -224,9 +220,6 @@ class _SearchMapWidgetState extends State<SearchMapWidget> {
     }
   }
 
-
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -253,171 +246,183 @@ class _SearchMapWidgetState extends State<SearchMapWidget> {
     return Padding(
         padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 110.0),
         child: Listener(
-          onPointerDown: (downPointerEvent) {
-            print("触摸按下事件");
-          },
-          onPointerUp: (upPointerEvent) {
-            print("触摸抬起");
-          },
-          child: Stack(
-            alignment: Alignment.topCenter,
-            children: <Widget>[
+            onPointerDown: (downPointerEvent) {
+              print("触摸按下事件");
+            },
+            onPointerUp: (upPointerEvent) {
+              print("触摸抬起");
+            },
+            child: Stack(alignment: Alignment.topCenter, children: <Widget>[
               Stack(
                 alignment: Alignment.bottomRight,
                 children: <Widget>[
                   Stack(
                     alignment: Alignment.center,
                     children: <Widget>[
-//                      AMapView(
-//                        onAMapViewCreated: (controller) {
-//                          this._controller = controller;
-//                        },
-//                        amapOptions: AMapOptions(
-//                          compassEnabled: false,
-//                          mapType: MAP_TYPE_NORMAL,
-//                          zoomControlsEnabled: true,
-//                          logoPosition: LOGO_POSITION_BOTTOM_CENTER,
-//                          camera: CameraPosition(
-//                              target: _newLatLng == null ? _latLng : _newLatLng,
-//                              zoom: 17),
-//                        ),
-//                      ),
-//                      GestureDetector(
-//                        onTap: () {
-//                          if (this._controller != null) {
-//                            this._controller.getCenterLatlng().then((latLng) {
-//                              this._controller.clearMarkers();
-//                              MarkerOptions options = MarkerOptions(
-//                                  position: latLng,
-//                                  icon: "images/2.0x/ico_end_marker.png");
-//                              this._controller.addMarker(options);
-//                            });
-//                          }
-//                        },
-//                        child: Image.asset("images/ic_red_location.png"),
-//                      )
-//                    ],
-//                  ),
-//                  Padding(
-//                    padding: EdgeInsets.fromLTRB(0.0, 0.0, 30.0, 40.0),
-//                    child: GestureDetector(
-//                      onTap: () {
-//                        this._controller.clearMarkers();
-//                        // print("点击了定位按钮");
-//                        if (_newLatLng != null) {
-//                          this._controller.changeLatLng(this._newLatLng);
-//                          MarkerOptions options = MarkerOptions(
-//                              position: _newLatLng,
-//                              icon: "images/2.0x/ico_end_marker.png");
-//                          this._controller.addMarker(options);
-//                        } else {
-//                          this._controller.changeLatLng(this._latLng);
-//                          MarkerOptions options = MarkerOptions(
-//                              position: _latLng,
-//                              icon: "images/2.0x/ico_end_marker.png");
-//                          this._controller.addMarker(options);
-//                        }
-//
-//                        this._controller.setZoomLevel(17);
-//                      },
-//                      child: Image.asset(
-//                        "images/locaiton1.png",
-//                        width: 30.0,
-//                        height: 30.0,
-//                        fit: BoxFit.cover,
-//                      ),
-//                    ),
-//                  )
-                ],
-              ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
-                child: GestureDetector(
-                  onTap: () {
-                    // print("点击跳转搜索界面");
-                    this._jumpSearchContentWidget();
-                    // ImagePicker.pickImage(source: ImageSource.gallery);
-                  },
-                  child: Container(
-                    // height: 40.0,
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(10.0, 0.0, 5.0, 0.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Icon(
-                            Icons.search,
-                            color: Color(0xff333333),
-                          ),
-                          Expanded(
-                              flex: 1,
-                              child: Text(
-                                this._searchContent,
-                                style: TextStyle(
-                                    fontSize: 16.0,
-                                    color: Color(0xff333333),
-                                    fontWeight: FontWeight.bold),
-                              )),
-                          IconButton(
-                              icon: Icon(
-                                Icons.cancel,
-                                color: Color(0xff333333),
-                              ),
-                              onPressed: () {
-//                                setState(() {
-//                                  this._searchContent = "请输入地址搜索";
-//                                  this._newLatLng = null;
-//                                });
-//                                this._controller.changeLatLng(_latLng);
-//                                this._controller.setZoomLevel(17);
-                              })
-                        ],
+                      // AMapView(
+                      //   onAMapViewCreated: (controller) {
+                      //     this._controller = controller;
+                      //   },
+                      //   amapOptions: AMapOptions(
+                      //     compassEnabled: false,
+                      //     mapType: MAP_TYPE_NORMAL,
+                      //     zoomControlsEnabled: true,
+                      //     logoPosition: LOGO_POSITION_BOTTOM_CENTER,
+                      //     camera: CameraPosition(
+                      //         target: _newLatLng == null ? _latLng : _newLatLng,
+                      //         zoom: 17),
+                      //   ),
+                      // ),
+                      AmapView(
+                        onMapCreated: (controller) async {
+                          this._controller = controller;
+                          if (_latLng != null) {
+                            await this
+                                ._controller
+                                .setCenterCoordinate(this._latLng);
+                            await this._controller.setZoomLevel(17);
+                          }
+                          this._controller.setMapMoveListener(
+                              onMapMoveEnd: (mapMove) {
+                            this._centerLatLng = mapMove.latLng;
+                            if (marks.length != 0) {
+                              this._controller.clearMarkers(marks);
+                            }
+                            this
+                                ._controller
+                                .addMarker(MarkerOption(
+                                    latLng: _centerLatLng,
+                                    iconProvider: AssetImage(
+                                        'images/2.0x/ico_end_marker.png')))
+                                .then((marker) {
+                              marks.add(marker);
+                            });
+                          });
+                        },
+                        showCompass: false,
                       ),
-                    ),
-                    decoration: BoxDecoration(
-                        color: Color(0x99888888),
-                        borderRadius: BorderRadius.all(Radius.circular(20.0))),
-                  ),
-                ),
-              ),
-              Positioned(
-                  bottom: 30.0,
-                  right: 130.0,
-                  child: GestureDetector(
-                    onTapUp: (_) {
-                      setState(() {
-                        this.isCanShake = false;
-                      });
-                    },
-                    onTapDown: (_) {
-                      setState(() {
-                        this.isCanShake = true;
-                      });
-                    },
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          "按住摇一摇 记地儿",
-                          style: TextStyle(
-                              fontSize: 16.0,
-                              color: isCanShake ? Colors.grey : Colors.red,
-                              fontWeight: FontWeight.bold),
+                      Image.asset("images/ic_red_location.png"),
+
+                      Positioned(
+                        bottom: 40.0,
+                        right: 30.0,
+                        child: GestureDetector(
+                          onTap: () {
+                            if (_newLatLng != null) {
+                              this
+                                  ._controller
+                                  .setCenterCoordinate(this._newLatLng);
+                            } else {
+                              this
+                                  ._controller
+                                  .setCenterCoordinate(this._latLng);
+                            }
+                            this._controller.setZoomLevel(17);
+                          },
+                          child: Image.asset(
+                            "images/locaiton1.png",
+                            width: 30.0,
+                            height: 30.0,
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                        Image.asset(
-                          isCanShake
-                              ? "images/ic_shake_gry.png"
-                              : "images/ic_shake_red.png",
-                          width: 50,
-                          height: 50,
-                        )
-                      ],
-                    ),
-                  ))
-            ],
-        //  ),
-      )])));
+                      ),
+                      Positioned(
+                        top: 20.0,
+                        left: 10.0,
+                        right: 10.0,
+                        child: GestureDetector(
+                          onTap: () {
+                            // print("点击跳转搜索界面");
+                            this._jumpSearchContentWidget();
+                            // ImagePicker.pickImage(source: ImageSource.gallery);
+                          },
+                          child: Container(
+                            height: 40.0,
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(10.0, 0.0, 5.0, 0.0),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.search,
+                                    color: Color(0xff333333),
+                                  ),
+                                  Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        this._searchContent,
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Color(0xff333333),
+                                            fontWeight: FontWeight.bold),
+                                      )),
+                                  IconButton(
+                                      icon: Icon(
+                                        Icons.cancel,
+                                        color: Color(0xff333333),
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          this._searchContent = "请输入地址搜索";
+                                          this._newLatLng = null;
+                                        });
+                                        this
+                                            ._controller
+                                            .setCenterCoordinate(_latLng);
+                                        this._controller.setZoomLevel(17);
+                                      })
+                                ],
+                              ),
+                            ),
+                            decoration: BoxDecoration(
+                                color: Color(0x99888888),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20.0))),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  Positioned(
+                      bottom: 30.0,
+                      right: 130.0,
+                      child: GestureDetector(
+                        onTapUp: (_) {
+                          setState(() {
+                            this.isCanShake = false;
+                          });
+                        },
+                        onTapDown: (_) {
+                          setState(() {
+                            this.isCanShake = true;
+                          });
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              "按住摇一摇 记地儿",
+                              style: TextStyle(
+                                  fontSize: 16.0,
+                                  color: isCanShake ? Colors.grey : Colors.red,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Image.asset(
+                              isCanShake
+                                  ? "images/ic_shake_gry.png"
+                                  : "images/ic_shake_red.png",
+                              width: 50,
+                              height: 50,
+                            )
+                          ],
+                        ),
+                      ))
+                ],
+                //  ),
+              )
+            ])));
   }
 
   Widget getBottomWidget() {
@@ -472,7 +477,6 @@ class _SearchMapWidgetState extends State<SearchMapWidget> {
 
 /*跳转到导航地址界面*/
   _jumpNavigation() async {
-   // LatLng centerLat = await this._controller.getCenterLatlng();
     String address =
         this._searchContent.contains("请输入地址") ? "当前地址" : this._searchContent;
     showDialog(
@@ -481,8 +485,8 @@ class _SearchMapWidgetState extends State<SearchMapWidget> {
         builder: (_) {
           return NavigationDialog(
             address: address,
-//            lat: centerLat.latitude,
-//            long: centerLat.longitude,
+           lat: _centerLatLng.latitude,
+           long: _centerLatLng.longitude,
             isShowParking: true,
           );
         });
@@ -490,20 +494,19 @@ class _SearchMapWidgetState extends State<SearchMapWidget> {
 
   /*点击跳转到搜索内容界面*/
   _jumpSearchContentWidget() {
-//    Navigator.pushNamed(context, '/searchContentWidget', arguments: _latLng)
-//        .then((tap) {
-//      if (tap != null) {
-//        SelectAddressBean bean = tap;
-//        //Toast.toast(context, msg: bean.name);
-//        setState(() {
-//          this._searchContent = bean.name;
-//          this._newLatLng = LatLng(bean.lat, bean.lng);
-//        });
-//
-//        this._controller.changeLatLng(_newLatLng);
-//        this._controller.setZoomLevel(17);
-//      }
-//    });
+   Navigator.pushNamed(context, '/searchContentWidget', arguments: _latLng)
+       .then((tap) {
+     if (tap != null) {
+       SelectAddressBean bean = tap;
+       //Toast.toast(context, msg: bean.name);
+       setState(() {
+         this._searchContent = bean.name;
+         this._newLatLng = LatLng(bean.lat, bean.lng);
+       });
+       this._controller.setCenterCoordinate(_newLatLng);
+       this._controller.setZoomLevel(17);
+     }
+   });
   }
 
   _netGetNowAddressInfo() {
@@ -534,7 +537,7 @@ class _SearchMapWidgetState extends State<SearchMapWidget> {
       Response response =
           await Dio().get(MAP_URL + "v3/geocode/regeo?", queryParameters: {
         "output": "json",
-       // "location": "${centerLat.longitude}" + "," + "${centerLat.latitude}",
+        // "location": "${centerLat.longitude}" + "," + "${centerLat.latitude}",
         "key": "1f3da247686bd27e50db1502dfff7916",
         "radius": "500",
         "extensions": "all"
@@ -548,7 +551,6 @@ class _SearchMapWidgetState extends State<SearchMapWidget> {
 
   /*记录地址弹窗*/
   _showRecordAddressDialog(String address) async {
-  //  LatLng centerLat = await this._controller.getCenterLatlng();
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -560,14 +562,14 @@ class _SearchMapWidgetState extends State<SearchMapWidget> {
           netAddressBean.remark = "0";
           netAddressBean.kind = "随心记";
           netAddressBean.address = address;
-//          netAddressBean.addressLocation =
-//              "${centerLat.longitude}" + "," + "${centerLat.latitude}";
+         netAddressBean.addressLocation =
+             "${_centerLatLng.longitude}" + "," + "${_centerLatLng.latitude}";
           netAddressBean.atendLocation = "0";
           netAddressBean.path1 = "0";
           netAddressBean.path2 = "0";
           netAddressBean.path3 = "0";
-//          netAddressBean.longs = "${centerLat.longitude}";
-//          netAddressBean.lat = "${centerLat.latitude}";
+         netAddressBean.longs = "${_centerLatLng.longitude}";
+         netAddressBean.lat = "${_centerLatLng.latitude}";
           return RecordAddressDialog(
             addressBean: netAddressBean,
             confirmCallBack: (NetAddressBean myBean) {

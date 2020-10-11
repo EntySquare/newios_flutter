@@ -1022,18 +1022,18 @@ class _locationWidgetState extends State<LocationWidget>
   /*跳转到搜索地址记录界面*/
   _jumpSearchMapWidget() {
     LoginUtil.ifLogin(login: (LoginBean loginBean) {
-      //LatLng jumpLatLng = LatLng(this.lat, this.lng);
-//      Navigator.pushNamed(context, '/searchMapWidget', arguments: jumpLatLng)
-//          .then((state) {
-//        switch (state) {
-//          case 0:
-//            this.mm1(0);
-//            break;
-//          case 1:
-//            this.mm1(1);
-//            break;
-//        }
-//      });
+      LatLng jumpLatLng = LatLng(this.lat, this.lng);
+     Navigator.pushNamed(context, '/searchMapWidget', arguments: jumpLatLng)
+         .then((state) {
+       switch (state) {
+         case 0:
+           this.mm1(0);
+           break;
+         case 1:
+           this.mm1(1);
+           break;
+       }
+     });
     }, unLogin: (LoginBean loginBean) {
       Navigator.pushNamed(context, "/login");
     });
