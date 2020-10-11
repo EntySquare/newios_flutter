@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:amap_map_fluttify/amap_map_fluttify.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:myflutter/pages/bean/AtentAddressBean.dart';
@@ -27,11 +28,14 @@ class AtentAddressWidget extends StatefulWidget {
 
 class _AtentAddressWidgetState extends State<AtentAddressWidget> {
   AtentAddressBean _atentAddressBean;
-  //AMapController _controller;
+  AmapController _controller;
   List atendLoctions;
   double long;
   double lat;
-   double _zoom=17;
+  LatLng centerLatLng;
+  double _zoom = 17;
+  List<Marker> markers = List();
+
   _AtentAddressWidgetState(atentAddressBean) {
     this._atentAddressBean = atentAddressBean;
   }
@@ -59,7 +63,8 @@ class _AtentAddressWidgetState extends State<AtentAddressWidget> {
               style: TextStyle(color: Colors.white, fontSize: 14.0),
             ),
           ),
-          preferredSize: Size.fromHeight(SystemUtil.getScreenSize(context).height*0.07)),
+          preferredSize:
+              Size.fromHeight(SystemUtil.getScreenSize(context).height * 0.07)),
       body: Stack(
         alignment: Alignment.bottomCenter,
         // mainAxisAlignment: MainAxisAlignment.start,
@@ -108,17 +113,36 @@ class _AtentAddressWidgetState extends State<AtentAddressWidget> {
 //                      ),
 //                    ),
 //                  ),
+                  AmapView(
+                    onMapCreated: (controller) {
+                      this._controller = controller;
+                      this._controller.setCenterCoordinate(LatLng(lat, long));
+                      this._controller.setZoomLevel(17);
+                      this._controller.setMapMoveListener(
+                          onMapMoveEnd: (moveEnd){
+                        if (this._controller == null) {
+                          return;
+                        }
+                        this.centerLatLng = moveEnd.latLng;
+                        if (markers.length != 0) {
+                          this._controller.clearMarkers(markers);
+                          markers.clear();
+                        }
+                        this
+                            ._controller
+                            .addMarker(MarkerOption(
+                                latLng: this.centerLatLng,
+                                iconProvider: AssetImage(
+                                    "images/2.0x/ico_end_marker.png")))
+                            .then((marker){
+                              markers.add(marker);
+                        });
+                      });
+                    },
+                    showCompass:false,
+                  ),
                   GestureDetector(
                     onTap: () {
-//                      if (this._controller != null) {
-//                        this._controller.getCenterLatlng().then((latLng) {
-//                          this._controller.clearMarkers();
-//                          MarkerOptions options = MarkerOptions(
-//                              position: latLng,
-//                              icon: "images/2.0x/ico_end_marker.png");
-//                          this._controller.addMarker(options);
-//                        });
-//                      }
                     },
                     child: Image.asset("images/ic_red_location.png"),
                   )
@@ -129,14 +153,10 @@ class _AtentAddressWidgetState extends State<AtentAddressWidget> {
                 child: GestureDetector(
                   onTap: () {
                     // print("点击了定位按钮");
-//                    this._controller.changeLatLng(LatLng(lat, long));
-//                    this._controller.clearMarkers();
-//                    MarkerOptions options = MarkerOptions(
-//                        position: LatLng(lat, long),
-//                        icon: "images/2.0x/ico_end_marker.png");
-//
-//                    this._controller.addMarker(options);
-//                    this._controller.setZoomLevel(int.parse("$_zoom"));
+                    if (this._controller != null) {
+                      this._controller.setCenterCoordinate(LatLng(lat, long));
+                      this._controller.setZoomLevel(17);
+                    }
                   },
                   child: Image.asset(
                     "images/locaiton1.png",
@@ -221,22 +241,13 @@ class _AtentAddressWidgetState extends State<AtentAddressWidget> {
             )),
       ],
     );
-
   }
 
   _updateAddressDialog(String target, String location) async {
-//    if (location != "0") {
-//      LatLng latLng = await this._controller.getCenterLatlng();
-//      location = "${latLng.longitude},${latLng.latitude}";
-//
-//      if (this._controller != null) {
-//        this._controller.clearMarkers();
-//        MarkerOptions option = MarkerOptions(
-//            position: latLng, icon: "images/2.0x/ico_end_marker.png");
-//        this._controller.addMarker(option);
-//      }
-//    }
-
+    if (location != "0") {
+      LatLng latLng = this.centerLatLng;
+      location = "${latLng.longitude},${latLng.latitude}";
+    }
     LoginBean loginBean = await LoginUtil.getLoginBean();
 
     showDialog(

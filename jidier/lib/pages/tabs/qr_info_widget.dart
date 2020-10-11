@@ -1,10 +1,8 @@
-import 'dart:async';
 
+import 'package:amap_map_fluttify/amap_map_fluttify.dart';
 import 'package:flutter/material.dart';
 import 'package:myflutter/pages/bean/AdressDataBean.dart';
-import 'package:base_mapview/base_mapview.dart';
 import 'package:myflutter/pages/util/SystemUtil.dart';
-import 'package:myflutter/pages/util/Toast.dart';
 
 /*二维码详情页面*/
 class QrInfoWidget extends StatefulWidget {
@@ -18,7 +16,7 @@ class QrInfoWidget extends StatefulWidget {
 
 class _QrInfoWidgetState extends State<QrInfoWidget> {
   ResponseData _responseData;
-//  AMapController _controller;
+    AmapController _controller;
 
   _QrInfoWidgetState(ResponseData responseData) {
     this._responseData = responseData;
@@ -43,38 +41,26 @@ class _QrInfoWidgetState extends State<QrInfoWidget> {
             child: Stack(
               alignment: Alignment.bottomRight,
               children: <Widget>[
-//                AMapView(
-//                  onAMapViewCreated: (controller) {
-//                    this._controller = controller;
-//                    MarkerOptions markerOption = MarkerOptions(
-//                        position: LatLng(double.parse(_responseData.lat),
-//                            double.parse(_responseData.longs)),
-//                        icon: "images/2.0x/ic_red_location.png");
-//
-//                    this._controller.addMarker(markerOption);
-//                    this._controller.setZoomLevel(17);
-//                  },
-//                  amapOptions: AMapOptions(
-//                    compassEnabled: false,
-//                    mapType: MAP_TYPE_NORMAL,
-//                    zoomControlsEnabled: true,
-//                    logoPosition: LOGO_POSITION_BOTTOM_CENTER,
-//                    camera: CameraPosition(
-//                      target: LatLng(double.parse(_responseData.lat),
-//                          double.parse(_responseData.longs)),
-//                    ),
-//                  ),
-//                ),
-//                Padding(
-//                    padding: EdgeInsets.fromLTRB(0.0, 0.0, 30.0, 40.0),
-//                    child: IconButton(
-//                        onPressed: () {
-//                          this._controller.changeLatLng(LatLng(
-//                              double.parse(_responseData.lat),
-//                              double.parse(_responseData.longs)));
-//                          this._controller.setZoomLevel(17);
-//                        },
-//                        icon: Image.asset("images/locaiton1.png"))),
+              AmapView(
+                onMapCreated:(controller){
+                  this._controller=controller;
+                  var latLnt= LatLng(double.parse(_responseData.lat),double.parse(_responseData.longs));
+                  this._controller.setCenterCoordinate(latLnt);
+                   this._controller.setZoomLevel(17);
+                  this._controller.addMarker(MarkerOption(latLng: latLnt,iconProvider:AssetImage('images/2.0x/ic_red_location.png')));
+                },
+                showCompass:false,
+              ),
+
+               Padding(
+                   padding: EdgeInsets.fromLTRB(0.0, 0.0, 30.0, 40.0),
+                   child: IconButton(
+                       onPressed: () {
+                         var latLnt= LatLng(double.parse(_responseData.lat),double.parse(_responseData.longs));
+                         this._controller.setCenterCoordinate(latLnt);
+                         this._controller.setZoomLevel(17);
+                       },
+                       icon: Image.asset("images/locaiton1.png"))),
               ],
             )));
   }

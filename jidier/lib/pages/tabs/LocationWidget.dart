@@ -222,12 +222,15 @@ class _locationWidgetState extends State<LocationWidget>
     this.lng=inLng;
     NowLatLng.lat=inLat;
     NowLatLng.lng=inLng;
+    if(markers.length!=0&&context!=null){
     this._controller.clearMarkers(markers);
     markers.clear();
     this._controller.addMarker(MarkerOption(latLng:LatLng(lat,lng),iconProvider:AssetImage('images/ico_red_location.png')))
         .then((marker) =>markers.add(marker));
+    }
     if(LocationDataUtil.nowlocation==null){
-      LocationDataUtil.nowlocation= NowLocation();}
+      LocationDataUtil.nowlocation= NowLocation();
+    }
     LocationDataUtil.nowlocation.lat=this.lat;
     LocationDataUtil.nowlocation.lng=this.lng;
   }
