@@ -348,7 +348,8 @@ class _QrCodeWidgetState extends State<QrCodeWidget> {
 
   _wx() async {
     String path = await _share();
-    int result = await MyApp.platform.invokeMethod("shareWx", path);
+    var myresult = await MyApp.platform.invokeMethod("shareWx", path);
+    var result = myresult ;
     switch (result) {
       case 0: //成功
         break;

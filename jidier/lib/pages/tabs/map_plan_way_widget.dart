@@ -1,3 +1,4 @@
+import 'package:amap_map_fluttify/amap_map_fluttify.dart';
 import 'package:flutter/material.dart';
 import 'package:myflutter/pages/bean/ItemPlanWayBean.dart';
 import 'package:base_mapview/base_mapview.dart';
@@ -15,7 +16,7 @@ class MapPlanWayWidget extends StatefulWidget {
 class _MapPlanWayWidgetState extends State<MapPlanWayWidget> {
   List<ItemPlanWayBean> _planData;
 
-//  AMapController _controller;
+  AmapController _controller;
 
   _MapPlanWayWidgetState(this._planData);
 
@@ -95,5 +96,46 @@ class _MapPlanWayWidgetState extends State<MapPlanWayWidget> {
 ////        ),
 //      ),
 //    );
+  return AmapView(
+    onMapCreated:(controller) async{
+      this._controller = controller;
+             List<MarkerOption> marks = List();
+       List<LatLng> latLngList = List();
+       for (ItemPlanWayBean itemBean in this._planData) {
+         double lat = double.parse(itemBean.lat);
+         double lng = double.parse(itemBean.lng);
+         LatLng latLng = LatLng(lng, lat);
+         latLngList.add(latLng);
+         MarkerOption markOptions;
+         if (itemBean.ifStart) {
+           markOptions = MarkerOption(
+               latLng: latLng,
+               iconProvider:AssetImage("images/ico_start.png"),
+           );
+         } else if (itemBean.ifEnd) {
+           markOptions = MarkerOption(
+               latLng: latLng,
+               iconProvider:AssetImage("images/ico_end.png"));
+         } else {
+           markOptions =MarkerOption(
+               latLng: latLng,
+               iconProvider:AssetImage('images/ico_green_location.png'),
+           );
+         }
+         marks.add(markOptions);
+       }
+  await  this._controller.setCenterCoordinate(latLngList[0]);
+   await this._controller.setZoomLevel(14);
+   await this._controller.addMarkers(marks);
+       PolylineOption polyLine = PolylineOption(
+           latLngList: latLngList,
+           width: 20.0,
+           strokeColor:Colors.red
+       );
+    await   this._controller.addPolyline(polyLine);
+    },
+    showCompass:false,
+  );
+
   }
 }
