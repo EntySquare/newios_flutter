@@ -15,6 +15,7 @@
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		ABB600B97DD4F153C40500C7 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 555246F60360395A9A4BB4B7 /* Pods_Runner.framework */; };
 		DD27F5942537100800678783 /* SystemUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = DD27F5932537100800678783 /* SystemUtil.m */; };
+		DD66200A25395EE6008B2C0D /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DD66200925395EE6008B2C0D /* libsqlite3.tbd */; };
 		DD711D2325388D1C001F6DBC /* myimage.png in Resources */ = {isa = PBXBuildFile; fileRef = DD711D2225388D1C001F6DBC /* myimage.png */; };
 		DD9E44B825347F2E00BDDE4C /* ShareTool.m in Sources */ = {isa = PBXBuildFile; fileRef = DD9E44B625347F2E00BDDE4C /* ShareTool.m */; };
 		DD9E45482534A2FC00BDDE4C /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DD9E452F2534A2FC00BDDE4C /* libWeChatSDK.a */; };
@@ -74,6 +75,8 @@
 		B6F4710E671649EC15EC6E38 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		DD27F5922537100800678783 /* SystemUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemUtil.h; sourceTree = "<group>"; };
 		DD27F5932537100800678783 /* SystemUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SystemUtil.m; sourceTree = "<group>"; };
+		DD66200925395EE6008B2C0D /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		DD66200B253962F2008B2C0D /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
 		DD711D2225388D1C001F6DBC /* myimage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = myimage.png; sourceTree = "<group>"; };
 		DD9E44B625347F2E00BDDE4C /* ShareTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShareTool.m; sourceTree = "<group>"; };
 		DD9E44B725347F2E00BDDE4C /* ShareTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShareTool.h; sourceTree = "<group>"; };
@@ -125,6 +128,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DD66200A25395EE6008B2C0D /* libsqlite3.tbd in Frameworks */,
 				DDAC73AC252FFDBC00DB49CD /* libc++.tbd in Frameworks */,
 				DDAC73AD252FFDBC00DB49CD /* libz.tbd in Frameworks */,
 				DD9E454E2534A2FC00BDDE4C /* ShareSDKLink.framework in Frameworks */,
@@ -182,6 +186,7 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
+				DD66200B253962F2008B2C0D /* Runner.entitlements */,
 				DD9E45272534A2FC00BDDE4C /* SDK */,
 				74858FAE1ED2DC5600515810 /* AppDelegate.swift */,
 				DD9E44B725347F2E00BDDE4C /* ShareTool.h */,
@@ -326,6 +331,7 @@
 		E96C08A893942ACFE77F70B4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DD66200925395EE6008B2C0D /* libsqlite3.tbd */,
 				DDAC73A0252FFDBB00DB49CD /* AddressBook.framework */,
 				DDAC739E252FFDBB00DB49CD /* AudioToolbox.framework */,
 				DDAC73AB252FFDBC00DB49CD /* AuthenticationServices.framework */,
@@ -603,6 +609,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "";
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = 3994VLPW3Z;
 				ENABLE_BITCODE = NO;
@@ -763,6 +770,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "";
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = 3994VLPW3Z;
 				ENABLE_BITCODE = NO;
@@ -817,6 +825,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "";
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = 3994VLPW3Z;
 				ENABLE_BITCODE = NO;

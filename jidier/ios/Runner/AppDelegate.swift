@@ -9,7 +9,7 @@ import AddressBook
     var myResult :FlutterResult?
     var navigationTool :NavigationTool = NavigationTool.init();
     private var speakerUtil :SpeakerUtil?
-    private var shareTool :ShareTool = ShareTool.init()
+    private var shareTool :ShareTool?
     func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
         
        
@@ -26,6 +26,7 @@ import AddressBook
   ) -> Bool {
     GeneratedPluginRegistrant.register(with: self)
     AMapServices.init().apiKey="30451939c0a123dfb05d9ae6b7c00b1f"
+    self.shareTool = ShareTool.init()
     initEventChannel();
     initChannel();
     initSpeaker();
@@ -148,15 +149,15 @@ import AddressBook
                 self.myResult!(0)
             }else if "shareWx" == call.method{ //分享到微信
                 let argument = call.arguments as! String
-                self.shareTool.initShareWx(argument, toResult: self.myResult!)
+                self.shareTool!.initShareWx(argument, toResult: self.myResult!)
             }else if "shareQQ" == call.method{
                 let argumnts = call.arguments as! Array<String>
                 let url = argumnts[0]
                 let addressName = argumnts[1]
-                self.shareTool.initShareQQ(url, toContent: addressName, toResult: self.myResult!)
+                self.shareTool!.initShareQQ(url, toContent: addressName, toResult: self.myResult!)
             }else if "shareAlipay" ==  call.method {
                 let argument = call.arguments as! String
-                self.shareTool.initShareAlipay(argument, toResult: self.myResult!)
+                self.shareTool!.initShareAlipay(argument, toResult: self.myResult!)
             }
         }
  

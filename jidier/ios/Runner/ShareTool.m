@@ -12,6 +12,7 @@
 - (instancetype)init
 {
     self = [super init];
+    [MobSDK uploadPrivacyPermissionStatus:YES onResult:^(BOOL success){}];
     if (self) {
         [ShareSDK registPlatforms:^(SSDKRegister *platformsRegister) {
             //QQ

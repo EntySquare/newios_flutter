@@ -370,7 +370,7 @@ class _ShareContactsWIdgetState extends State<ShareContactsWIdget> {
     try {
       Response response = await Dio().post(url + 'setAlert',
           data: {"addid": _id, "sendid": loginBean.id, 'phone': phones},
-          options: Options(headers: {"AUTHORIZATION": loginBean.token}));
+          options: Options(headers: {"AUTHORIZATION": loginBean.token},responseType:ResponseType.plain));
       isNet = true;
       return response;
     } catch (e) {

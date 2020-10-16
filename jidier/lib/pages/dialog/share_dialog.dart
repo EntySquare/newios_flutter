@@ -99,34 +99,37 @@ class _ShareDialogState extends State<ShareDialog> {
                           )
                         ],
                       ),
-                      Row(
-                        crossAxisAlignment:CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Expanded(
-                            flex: 1,
-                            child: Container(),
-                          ),
-                          getIcoButton(3),
-                          Expanded(
-                            flex: 1,
-                            child: Container(),
-                          ),
-                          getIcoButton(4),
-                          Expanded(
-                            flex: 1,
-                            child: Container(),
-                          ),
-                          getIcoButton(4),
-                          Expanded(
-                            flex: 1,
-                            child: Container(),
-                          )
-
-                        ],
-
-
-
+                      Container(
+                        height: 5.0,
                       )
+                      // Row(
+                      //   crossAxisAlignment:CrossAxisAlignment.center,
+                      //   children: <Widget>[
+                      //     Expanded(
+                      //       flex: 1,
+                      //       child: Container(),
+                      //     ),
+                      //     getIcoButton(3),
+                      //     Expanded(
+                      //       flex: 1,
+                      //       child: Container(),
+                      //     ),
+                      //     getIcoButton(4),
+                      //     Expanded(
+                      //       flex: 1,
+                      //       child: Container(),
+                      //     ),
+                      //     getIcoButton(4),
+                      //     Expanded(
+                      //       flex: 1,
+                      //       child: Container(),
+                      //     )
+                      //
+                      //   ],
+                      //
+                      //
+                      //
+                      // )
 
                     ],
                   ),

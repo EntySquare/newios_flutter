@@ -282,23 +282,27 @@ class _MessageWidgetState extends State<MessageWidget> {
                               width: 30.0,
                             ),
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              _netMessageRead("${bean.id}", index);
-                              List<String> locations =
-                                  bean.address.addressLocation.split(",");
-                              _showNavigationDialog(
-                                  bean.address.address,
-                                  double.parse(locations[1]),
-                                  double.parse(locations[0]));
-                            },
-                            child: Text(
-                              '${bean.address.address != null ? bean.address.address : ''}',
-                              style: TextStyle(
-                                  fontSize: 14.0,
-                                  color: Color(0xff00afaf),
-                                  fontWeight: FontWeight.bold),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                _netMessageRead("${bean.id}", index);
+                                List<String> locations =
+                                    bean.address.addressLocation.split(",");
+                                _showNavigationDialog(
+                                    bean.address.address,
+                                    double.parse(locations[1]),
+                                    double.parse(locations[0]));
+                              },
+                              child: Text(
+                                '${bean.address.address != null ? bean.address.address : ''}',
+                                style: TextStyle(
+                                    fontSize: 14.0,
+                                    color: Color(0xff00afaf),
+                                    fontWeight: FontWeight.bold),
+                                maxLines: 100,
+                              ),
                             ),
+                            flex: 1,
                           )
                         ],
                       ),
@@ -403,7 +407,9 @@ class _MessageWidgetState extends State<MessageWidget> {
     try {
       Response response = await Dio().post(url + 'getNoReadAlert',
           data: {'phone': loginBean.phone},
-          options: Options(headers: {"AUTHORIZATION": loginBean.token}));
+          options: Options(
+              headers: {"AUTHORIZATION": loginBean.token},
+              responseType: ResponseType.plain));
       NetUtil.ifNetSuccessful(response, successfull: (ResponseBean2 result) {
         Map map = result.responseData;
         int number = map['countMessage'];
@@ -434,6 +440,7 @@ class _MessageWidgetState extends State<MessageWidget> {
   /*获取消息列表接口*/
   netGetMessageListNetTask() async {
     LoginBean loginBean = await LoginUtil.getLoginBean();
+    var myurl = url + 'getAlertList';
     try {
       Response response = await Dio().post(url + 'getAlertList',
           data: {
@@ -441,7 +448,9 @@ class _MessageWidgetState extends State<MessageWidget> {
             'page': _page,
             'pageSize': _pageSize
           },
-          options: Options(headers: {"AUTHORIZATION": loginBean.token}));
+          options: Options(
+              headers: {"AUTHORIZATION": loginBean.token},
+              responseType: ResponseType.plain));
       NetUtil.ifNetSuccessful(response, successfull: (responseBean) {
         String responseStr = response.toString();
         ms.MessagesBean messageBean = NetUtil.getMessageBean(responseStr);
@@ -563,7 +572,9 @@ class _MessageWidgetState extends State<MessageWidget> {
             'id': id,
             'is_read': "1",
           },
-          options: Options(headers: {"AUTHORIZATION": loginBean.token}));
+          options: Options(
+              headers: {"AUTHORIZATION": loginBean.token},
+              responseType: ResponseType.plain));
       NetUtil.ifNetSuccessful(response, successfull: (responseBean) {
         setState(() {
           messages[index].isRead = 1;
@@ -717,7 +728,7 @@ class _MessageWidgetState extends State<MessageWidget> {
           data: {
             'phone': loginBean.phone,
           },
-          options: Options(headers: {"AUTHORIZATION": loginBean.token}));
+          options: Options(headers: {"AUTHORIZATION": loginBean.token},responseType:ResponseType.plain));
       NetUtil.ifNetSuccessful(response, successfull: (responseBean) {
         for (ms.Data itemBean in messages) {
           itemBean.isRead = 1;

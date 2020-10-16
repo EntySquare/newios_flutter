@@ -307,7 +307,7 @@ class _leftSideWidgetState extends State<LeftSideWidget> {
     try {
       Response response = await Dio().post(url + 'getNoReadAlert',
           data: {'phone': loginBean.phone},
-          options: Options(headers: {"AUTHORIZATION": loginBean.token}));
+          options: Options(headers: {"AUTHORIZATION": loginBean.token},responseType:ResponseType.plain));
       NetUtil.ifNetSuccessful(response, successfull: (ResponseBean2 result) {
         Map map = result.responseData;
         int number = map['countMessage'];
