@@ -142,7 +142,7 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget> {
     try {
       Response response = await Dio().put(url + "users",
           data:{"pwd":this.firstPassword},
-          options: Options(headers: {"AUTHORIZATION": loginBean.token}));
+          options: Options(headers: {"AUTHORIZATION": loginBean.token},responseType:ResponseType.plain));
 
       NetUtil.ifNetSuccessful(response,
           successfull: (ResponseBean responseBean) {
