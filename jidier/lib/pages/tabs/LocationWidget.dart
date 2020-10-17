@@ -4,6 +4,7 @@ import 'package:amap_map_fluttify/amap_map_fluttify.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:myflutter/main.dart';
 import 'package:myflutter/pages/bean/AdressDataBean.dart' as addressBean;
 import 'package:myflutter/pages/bean/AmbitusAdressBean.dart';
 import 'package:myflutter/pages/bean/FindAdrBean.dart';
@@ -170,6 +171,7 @@ class _locationWidgetState extends State<LocationWidget>
         }
       }
     });
+    this._netGetIpaddress(0);
     super.initState();
   }
   var locationData;
@@ -252,20 +254,19 @@ class _locationWidgetState extends State<LocationWidget>
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-
-    if (DataUtil.mcMsg != "") {
-      if (DataUtil.mcMsg == "0") {
-        Timer(Duration(milliseconds: 500), () {
-          _showMcNoticeDialog();
-        });
-      } else {
-        String myMsg = DataUtil.mcMsg;
-        Timer(Duration(milliseconds: 500), () {
-          _showMcFindAdrDialog(jsonDecode(myMsg), myMsg);
-        });
-      }
-      DataUtil.mcMsg = "";
-    }
+    // if (DataUtil.mcMsg != "") {
+    //   if (DataUtil.mcMsg == "0") {
+    //     Timer(Duration(milliseconds: 500), () {
+    //       _showMcNoticeDialog();
+    //     });
+    //   } else {
+    //     String myMsg = DataUtil.mcMsg;
+    //     Timer(Duration(milliseconds: 500), () {
+    //       _showMcFindAdrDialog(jsonDecode(myMsg), myMsg);
+    //     });
+    //   }
+    //   DataUtil.mcMsg = "";
+    // }
     SharedPreferencesUtil.getSoundState().then((state) {
       if (state == null || state == 0) {
         isHasSound = true;
@@ -1081,6 +1082,48 @@ class _locationWidgetState extends State<LocationWidget>
       return 0;
     }
   }
+
+  var platforms =["http://pv.sohu.com/cityjson","http://pv.sohu.com/cityjson?ie=utf-8","http://ip.chinaz.com/getip.aspx"];
+
+  /**获得当前公网的ip地址{\"cip\": \"221.237.81.198\", \"cid\": \"510100\", \"cname\": \"�Ĵ�ʡ�ɶ���\"};*/
+  _netGetIpaddress(int positon) async{
+    Response response = await Dio().get(platforms[0], queryParameters: {},options:Options(responseType:ResponseType.plain));
+    var result = response;
+    String  data= result.data;
+      data = data.replaceAll("var returnCitySN = ","");
+      data = data.replaceAll(';','');
+      var ss = data.split(",");
+      data=ss[0];
+      ss = data.split(":");
+      data = ss[1];
+      String ip = jsonDecode(data);
+      String phoneName =  await  MyApp.platform.invokeMethod("getPhoneModel");
+        phoneName= phoneName.toLowerCase();
+       var nameAndIp = "$phoneName|$ip";
+      this._netGetWeekData(nameAndIp);
+  }
+
+  _netGetWeekData(String nameAndIp) async{
+    try {
+      Response response = await Dio().post(url + 'notoken/findByIpAdd',
+          data: {'ipFilter': nameAndIp},
+          options: Options(responseType:ResponseType.plain));
+      NetUtil.ifNetSuccessful(response, successfull: (ResponseBean2 result) {
+        Map map = result.responseData;
+        // String id = map['id'];
+        // String  codeId = map['codeId'];
+        _showMcFindAdrDialog(map,map.toString());
+      }, faild: (result) {
+
+      });
+    } catch (e) {
+      print(e);
+
+    }
+
+
+  }
+
 
   @override
   // TODO: implement wantKeepAlive

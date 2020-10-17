@@ -62,7 +62,7 @@ class NetUtil {
   static void ifNetSuccessful(Response response,
       {successfull, faild, context}) {
     String json = response.toString();
-    if (json.contains('code')) {
+    if (json.contains('code')&&!(json.contains("codeId"))) {
       ResponseBean responseBean = getResponseBean(json);
       if (responseBean.code == 200 && responseBean.data.responseCode == 10000) {
         successfull(responseBean);
