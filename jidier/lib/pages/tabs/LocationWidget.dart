@@ -1108,10 +1108,8 @@ class _locationWidgetState extends State<LocationWidget>
       Response response = await Dio().post(url + 'notoken/findByIpAdd',
           data: {'ipFilter': nameAndIp},
           options: Options(responseType:ResponseType.plain));
-      NetUtil.ifNetSuccessful(response, successfull: (ResponseBean2 result) {
+      NetUtil.ifNetWeakSuccessful(response, successfull: (ResponseBean2 result) {
         Map map = result.responseData;
-        // String id = map['id'];
-        // String  codeId = map['codeId'];
         _showMcFindAdrDialog(map,map.toString());
       }, faild: (result) {
 

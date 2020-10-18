@@ -62,7 +62,7 @@ class NetUtil {
   static void ifNetSuccessful(Response response,
       {successfull, faild, context}) {
     String json = response.toString();
-    if (json.contains('code')&&!(json.contains("codeId"))) {
+    if (json.contains('code')) {
       ResponseBean responseBean = getResponseBean(json);
       if (responseBean.code == 200 && responseBean.data.responseCode == 10000) {
         successfull(responseBean);
@@ -78,4 +78,19 @@ class NetUtil {
       }
     }
   }
+  /*判断唤起网络是否请求成功*/
+  static void ifNetWeakSuccessful(Response response,
+      {successfull, faild, context}) {
+    String json = response.toString();
+
+      ResponseBean2 response2 = getResponseBean2(json);
+      if (response2.responseCode == 10000) {
+        successfull(response2);
+      } else {
+        faild(response2);
+      }
+
+  }
+
+
 }
