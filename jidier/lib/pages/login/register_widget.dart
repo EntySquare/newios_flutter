@@ -17,6 +17,8 @@ import 'package:myflutter/pages/util/Toast.dart';
 import 'package:myflutter/pages/util/NetUtil.dart';
 import 'package:myflutter/pages/util/HttpContent.dart';
 
+import '../../main.dart';
+
 /* 注册界面*/
 class RegisterWidget extends StatefulWidget {
   var parameter;
@@ -486,13 +488,14 @@ class _RegisterWidgetState extends State<RegisterWidget> {
 
   /*网络注册接口*/
   _netRigister() async {
-    // Navigator.pop(context);
+    var city = await MyApp.platform.invokeMethod("getCity",[NowLatLng.lat,NowLatLng.lng]);
+     NowLatLng.city= city==null ? "成都":city;
     try {
-       var   city= NowLatLng.city;
+       var   city=NowLatLng.city;
       Response response = await Dio().post(url + 'createUsers',
           data: {"phone": this._phone, "pwd": this._firstPassword,"city":city},
           options: Options(
-              headers: {"AUTHORIZATION": "myjidiertokenmessage123456"}));
+              headers: {"AUTHORIZATION": "myjidiertokenmessage123456"},responseType:ResponseType.plain));
       NetUtil.ifNetSuccessful(response, successfull: (ResponseBean bean) {
         // Navigator.pop(context);ß
         Toast.toast(context, msg: bean.data.responseText, showTime: 1000);

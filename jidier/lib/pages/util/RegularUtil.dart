@@ -5,7 +5,7 @@ class RegularUtil{
   /// 此方法中前三位格式有：
   /// 13+任意数 * 15+除4的任意数 * 18+除1和4的任意数 * 17+除9的任意数 * 147
   static bool isChinaPhoneLegal(String str) {
-    return new RegExp('^((13[0-9])|(15[^4])|(166)|(17[0-8])|(18[0-9])|(19[8-9])|(147,145))\\d{8}\$').hasMatch(str);
+    return new RegExp('^((13[0-9])|(15[^4])|(166)|(17[0-8])|(18[0-9])|(19[0-9])|(147,145))\\d{8}\$').hasMatch(str);
   }
   static bool isCallnum(String str){
 

@@ -158,6 +158,27 @@ import AddressBook
                 let mode =  UIDevice.current.model
                 self.myResult!(mode)
                 
+            }else if "getCity" == call.method{ // 获取城市名称
+                let argements =  call.arguments as! NSArray ;
+                let  strStartLat = argements.object(at:0)  ;
+                let flStartLat = Double("\(strStartLat)");
+                let  strStartLng = argements.object(at: 1) ;
+                let flStartLng = Double("\(strStartLng)");
+                let location = CLLocation.init(latitude: flStartLat!, longitude: flStartLng!)
+                let clGeocoder = CLGeocoder.init()
+                clGeocoder.reverseGeocodeLocation(location){
+                    (placemark,error) -> Void in
+                    if(error == nil){
+                        let array = placemark! as Array
+                        let mark  = array[0]  as! CLPlacemark
+                        let city :String = (mark.addressDictionary! as NSDictionary).value(forKey: "City") as! String
+                        self.myResult!(city)
+                    }
+                    
+                    
+                }
+                
+                
             }
         }
  
