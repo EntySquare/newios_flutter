@@ -19,7 +19,7 @@
            //[platformsRegister setupQQWithAppId:@"1109901562" appkey:@"w3vwID1zUaFqQS5L"];
             [platformsRegister setupQQWithAppId:@"1109901562" appkey:@"w3vwID1zUaFqQS5L" enableUniversalLink:YES universalLink:@"https://www.sandslee.com/"];
             //微信
-            [platformsRegister setupWeChatWithAppId:@"WXE5489F425E32F89F" appSecret:@"9724fbbc0599a2a07bc0525c26f76e19" universalLink:@"https://www.sandslee.com/"];
+            [platformsRegister setupWeChatWithAppId:@"wxe5489f425e32f89f" appSecret:@"9724fbbc0599a2a07bc0525c26f76e19" universalLink:@"https://www.sandslee.com/"];
             
             //阿里支付
             [platformsRegister setupAliSocialWithAppId:@"2021001103615444"];

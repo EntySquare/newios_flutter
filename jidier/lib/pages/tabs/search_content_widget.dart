@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:myflutter/main.dart';
 import 'package:myflutter/pages/bean/SelectAddressBean.dart';
+import 'package:myflutter/pages/dialog/NetLoadingDialog.dart';
 import 'package:myflutter/pages/util/BlankToolBarModel.dart';
 import 'package:myflutter/pages/util/DiatanceUtil.dart';
 import 'package:myflutter/pages/util/LocationDataUtil.dart';
@@ -110,9 +111,7 @@ class _SearchContentWidgetState extends State<SearchContentWidget> {
                               borderSide: BorderSide(color: Colors.black12))),
                       cursorColor: Color(0xff00afaf),
                       onChanged: (text) {
-                        // print(text);
                         this._searchContent = text;
-                        this._search(text);
                       },
                       style: TextStyle(
                           fontSize: 16.0,
@@ -125,6 +124,9 @@ class _SearchContentWidgetState extends State<SearchContentWidget> {
                                   TextPosition(
                                       affinity: TextAffinity.upstream,
                                       offset: _searchContent.length)))),
+                      onSubmitted: (text) {
+                        this._searchDialog(this._searchContent);
+                      },
                     ),
                   ),
                   IconButton(
@@ -134,9 +136,8 @@ class _SearchContentWidgetState extends State<SearchContentWidget> {
                         width: 25.0,
                       ),
                       onPressed: () {
-                        setState(() {
-                          this._searchContent = "";
-                        });
+                        this._searchContent = "";
+                        this._searchDialog(this._searchContent);
                       }),
                   Padding(
                     padding: EdgeInsets.fromLTRB(0.0, 0.0, 5.0, 0.0),
@@ -164,11 +165,11 @@ class _SearchContentWidgetState extends State<SearchContentWidget> {
             requestCallBack: _sepeaker(),
           );
         }).then((speakContent) {
-      if (speakContent != null&&speakContent!="") {
+      if (speakContent != null && speakContent != "") {
         setState(() {
           _searchContent = speakContent;
         });
-        this._search(speakContent);
+        this._searchDialog(speakContent);
       }
     });
   }
@@ -201,13 +202,27 @@ class _SearchContentWidgetState extends State<SearchContentWidget> {
     );
   }
 
-  _search(content) async {
+  /*显示搜索弹窗*/
+  _searchDialog(content) {
     if (content == null || content == "") {
       setState(() {
         this._result = List();
       });
-      return;
+    } else {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return new NetLoadingDialog(
+              loadingText: "获取中...",
+              outsideDismiss: false,
+              requestCallBack: _search(content),
+            );
+          });
     }
+  }
+
+  _search(content) async {
     String city = "北京市";
     var lng;
     var lat;
@@ -224,7 +239,9 @@ class _SearchContentWidgetState extends State<SearchContentWidget> {
 
       setState(() {
         this._result = jsonResult;
+        this._searchContent = content;
       });
+      Navigator.pop(context);
     }
   }
 

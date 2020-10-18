@@ -5,6 +5,7 @@
 	<key>com.apple.developer.associated-domains</key>
 	<array>
 		<string>com.jidier.keji.jidier</string>
+		<string>applinks:bbvjwg.jgmlink.cn</string>
 	</array>
 </dict>
 </plist>

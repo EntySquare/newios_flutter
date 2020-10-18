@@ -33,10 +33,6 @@ import AddressBook
     search.delegate=self
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
-
-    
-    
-    
     func initEventChannel(){
         let parm = self.window.rootViewController
         let controller = parm as! FlutterViewController ;
@@ -158,6 +154,10 @@ import AddressBook
             }else if "shareAlipay" ==  call.method {
                 let argument = call.arguments as! String
                 self.shareTool!.initShareAlipay(argument, toResult: self.myResult!)
+            }else if "getPhoneModel" == call.method {
+                let mode =  UIDevice.current.model
+                self.myResult!(mode)
+                
             }
         }
  

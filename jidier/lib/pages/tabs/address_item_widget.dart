@@ -135,9 +135,9 @@ class _AddressItemWidgetState extends State<AddressItemWidget>
                                 enabledBorder: InputBorder.none),
                             onChanged: (value) {
                               this._searchContent = value;
-                              this.data.clear();
-                              this._page = 1;
-                              this._initAddressNodialog();
+                              // this.data.clear();
+                              // this._page = 1;
+                              // this._initAddressNodialog();
                             },
                             style: TextStyle(fontSize: 16.0),
                             onSubmitted: (value) {

@@ -82,12 +82,7 @@ class _RecordAddressDialogState extends State<RecordAddressDialog>
 
   @override
   Widget build(BuildContext context) {
-    TextSpanUtil.buildTextSpan(context, this._addressBean.remark)
-        .then((textSpan) {
-      setState(() {
-        this.textSpan = textSpan;
-      });
-    });
+
 
     return GestureDetector(
       onTap: () {},
@@ -161,13 +156,15 @@ class _RecordAddressDialogState extends State<RecordAddressDialog>
                 Expanded(
                   flex: 1,
                   child: TextField(
-                    autofocus: false,
+                    autofocus:true,
                     keyboardType: TextInputType.text,
                     controller: TextEditingController.fromValue(
                         TextEditingValue(
                             text: this._addressBean.describe,
                             selection: TextSelection.fromPosition(TextPosition(
-                                offset: this._addressBean.describe.length)))),
+                                offset: this._addressBean.describe.length,
+                               affinity: TextAffinity.upstream
+                            )))),
                     decoration: InputDecoration(
                         hintText: "请输入地址描述(必填)",
                         hintStyle:
@@ -351,8 +348,12 @@ class _RecordAddressDialogState extends State<RecordAddressDialog>
                         color: _state == 0 ? Colors.white : Color(0xff009688)),
                   ),
                   onTap: () {
-                    setState(() {
-                      this._state = 1;
+                    TextSpanUtil.buildTextSpan(context, this._addressBean.remark)
+                        .then((textSpan) {
+                      setState(() {
+                        this.textSpan = textSpan;
+                        this._state = 1;
+                      });
                     });
                   },
                 )

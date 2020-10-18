@@ -63,6 +63,7 @@ class _UpdateAddressDialogState extends State<UpdateAddressDialog>
     _controller = AnimationController(vsync: this);
     blankToolBarModel.outSideCallback = focusNodeChange;
     super.initState();
+
   }
 
 // Step2.2: 焦点变化时的响应操作
@@ -79,12 +80,6 @@ class _UpdateAddressDialogState extends State<UpdateAddressDialog>
 
   @override
   Widget build(BuildContext context) {
-    TextSpanUtil.buildTextSpan(context, this._addressBean.remark)
-        .then((textSpan) {
-      setState(() {
-        this.textSpan = textSpan;
-      });
-    });
 
     return GestureDetector(
       onTap: () {},
@@ -347,8 +342,12 @@ class _UpdateAddressDialogState extends State<UpdateAddressDialog>
                         color: _state == 0 ? Colors.white : Color(0xff009688)),
                   ),
                   onTap: () {
-                    setState(() {
-                      this._state = 1;
+                    TextSpanUtil.buildTextSpan(context, this._addressBean.remark)
+                        .then((textSpan) {
+                      setState(() {
+                        this.textSpan = textSpan;
+                        this._state = 1;
+                      });
                     });
                   },
                 )
