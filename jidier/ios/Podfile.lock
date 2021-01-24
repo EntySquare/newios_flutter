@@ -23,7 +23,7 @@ PODS:
     - AMapSearch-NO-IDFA (~> 7.3.0)
     - Flutter
     - foundation_fluttify
-  - AMapFoundation-NO-IDFA (1.6.4)
+  - AMapFoundation-NO-IDFA (1.6.5.1)
   - AMapLocation-NO-IDFA (2.6.7):
     - AMapFoundation-NO-IDFA (~> 1.6.4)
   - AMapSearch-NO-IDFA (7.3.0):
@@ -53,11 +53,14 @@ PODS:
     - Flutter
   - image_picker_saver (0.0.1):
     - Flutter
+  - JCore (2.4.0)
+  - JMLink (1.2.4):
+    - JCore (< 3.0.0, >= 2.0.0)
   - location (0.0.1):
     - Flutter
-  - mob_smssdk (3.2.10):
+  - mob_smssdk (3.3.1):
     - MOBFoundation
-  - MOBFoundation (3.2.18)
+  - MOBFoundation (3.2.24)
   - mobsms (0.0.1):
     - Flutter
     - mob_smssdk
@@ -93,6 +96,7 @@ DEPENDENCIES:
   - foundation_fluttify (from `.symlinks/plugins/foundation_fluttify/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
   - image_picker_saver (from `.symlinks/plugins/image_picker_saver/ios`)
+  - JMLink (= 1.2.4)
   - location (from `.symlinks/plugins/location/ios`)
   - mobsms (from `.symlinks/plugins/mobsms/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
@@ -110,6 +114,8 @@ SPEC REPOS:
     - AMapLocation-NO-IDFA
     - AMapSearch-NO-IDFA
     - FMDB
+    - JCore
+    - JMLink
     - mob_smssdk
     - MOBFoundation
 
@@ -169,7 +175,7 @@ SPEC CHECKSUMS:
   amap_location_fluttify: baa3007e3f215456ab2ea2f4ccccf5bc1a9a164b
   amap_map_fluttify: 6b64256d6ccea7813e1b6423fcf7b5ef10d3c984
   amap_search_fluttify: f83f950b4f8e8688bc8b100684c33868335f2e06
-  AMapFoundation-NO-IDFA: 68a24362b110b8e0a3677605d0fd36bdf521f2bb
+  AMapFoundation-NO-IDFA: 0cf5f6c6de2725bcd868ed5aa756d12bc1a8f463
   AMapLocation-NO-IDFA: 2a3edfee336b38481b892e1ecc85df0f6b365851
   AMapSearch-NO-IDFA: 85555dc9ba312949d39a259baa4ef4e0619fa944
   audioplayers: 84f968cea3f2deab00ec4f8ff53358b3c0b3992c
@@ -184,9 +190,11 @@ SPEC CHECKSUMS:
   foundation_fluttify: 0c45145e3fad1fb99188e4979daed5b24cd9b278
   image_picker: 9c3312491f862b28d21ecd8fdf0ee14e601b3f09
   image_picker_saver: 4f28bd70e1efdca68ad88beab0f11d22cffe04f6
+  JCore: a29e4b0ee54e1301446dc02d8e1c350404108b34
+  JMLink: d987a12c3648ddc2a56e1244437f67f2f111fc9a
   location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
-  mob_smssdk: bd7493aa6f21e12b8daed8935c32c69552907d14
-  MOBFoundation: b9dcc4bb4d3d3ade8d625190d6a77adbca563dcc
+  mob_smssdk: 5a4ea1a132ba9c883af1a469c49d2ceede592fef
+  MOBFoundation: 934ee1a43aed452d51942b416bc3dc4d0813ac82
   mobsms: 141956ad151a39a69a47a2ddf2e186405346c4ef
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
@@ -196,6 +204,6 @@ SPEC CHECKSUMS:
   sqflite: 4001a31ff81d210346b500c55b17f4d6c7589dd0
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
 
-PODFILE CHECKSUM: 9c76df4c51a6ae199dfb548bbf43683504750e9b
+PODFILE CHECKSUM: 0e9da007def7efd600a5a7c8777abc5a0ae3fccb
 
 COCOAPODS: 1.9.3

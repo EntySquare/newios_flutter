@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:myflutter/pages/bean/AmbitusAdressBean.dart';
 import 'package:myflutter/pages/bean/LoginBean.dart';
 import 'package:myflutter/pages/bean/NetAddressBean.dart';
+import 'package:myflutter/pages/bean/NowLatLng.dart';
 import 'package:myflutter/pages/bean/SelectAddressBean.dart';
 import 'package:myflutter/pages/dialog/NetLoadingDialog3.dart';
 import 'package:myflutter/pages/dialog/navigation_dialog.dart';
@@ -107,6 +108,10 @@ class _SearchMapWidgetState extends State<SearchMapWidget> {
   }
 
   _shakeGetNowAddressInfo() {
+    if(NowLatLng.lat==null||NowLatLng.lat==0){
+      Toast.toast(context,msg:"未获得当前位置信息，请检查是否开启定位权限!",showTime:2000);
+      return;
+    }
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -510,6 +515,10 @@ class _SearchMapWidgetState extends State<SearchMapWidget> {
   }
 
   _netGetNowAddressInfo() {
+    if(NowLatLng.lat==null||NowLatLng.lat==0){
+      Toast.toast(context,msg:"未获得当前位置信息，请检查是否开启定位权限!",showTime:2000);
+      return;
+    }
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -532,12 +541,12 @@ class _SearchMapWidgetState extends State<SearchMapWidget> {
   }
 
   Future<Response> _netAmbitusAddressByLocation() async {
-    //LatLng centerLat = await this._controller.getCenterLatlng();
+
     try {
       Response response =
           await Dio().get(MAP_URL + "v3/geocode/regeo?", queryParameters: {
         "output": "json",
-        // "location": "${centerLat.longitude}" + "," + "${centerLat.latitude}",
+         "location": "${_centerLatLng.longitude}" + "," + "${_centerLatLng.latitude}",
         "key": "1f3da247686bd27e50db1502dfff7916",
         "radius": "500",
         "extensions": "all"

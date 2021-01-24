@@ -10,12 +10,12 @@ import AddressBook
     var navigationTool :NavigationTool = NavigationTool.init();
     private var speakerUtil :SpeakerUtil?
     private var shareTool :ShareTool?
+    private var flutterEventSink :FlutterEventSink?
     func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
-        
-       
+        self.flutterEventSink = events
+           initJMLink()
         return nil
     }
-    
     func onCancel(withArguments arguments: Any?) -> FlutterError? {
      return nil
     }
@@ -30,17 +30,46 @@ import AddressBook
     initEventChannel();
     initChannel();
     initSpeaker();
+    //initJMLink();
     search.delegate=self
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
+    override func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        JMLinkService.routeMLink(url)
+        return true
+    }
+    override func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+        JMLinkService.continue(userActivity)
+        return true
+    }
     func initEventChannel(){
         let parm = self.window.rootViewController
         let controller = parm as! FlutterViewController ;
-        controller.setInitialRoute("App");
-        let controller2 = controller as! FlutterBinaryMessenger ;
-        let eventChannel=FlutterEventChannel.init(name:"mc",binaryMessenger:controller2) ;
-        eventChannel.setStreamHandler(self) ;
+        controller.pushRoute("App")
+        let eventChannel=FlutterEventChannel.init(name:"mc",binaryMessenger:controller.binaryMessenger)
+        eventChannel.setStreamHandler(self)
+        
     }
+    func  initJMLink(){
+        let config = JMLinkConfig.init()
+        config.appKey="F3TGD41LEQDUFZ5FE4611OFK966J259B"
+        JMLinkService.setup(with: config)
+        JMLinkService.registerHandler{(reponse)in
+          let params = reponse?.params
+          let strResult=params?["id"]
+          print("==jmlink\(strResult)")
+          self.flutterEventSink!(strResult)
+        }
+        print("==jmlink")
+        
+    }
+    //实例化原生发事件到flutter
+//    func initEvetntChannel(){
+//        let flutterviewController = FlutterViewController.init()
+//        flutterviewController.setInitialRoute("App")
+//        let eventChannel = FlutterEventChannel(name: "mc", binaryMessenger:flutterviewController.binaryMessenger)
+//        eventChannel.setStreamHandler(self)
+//    }
     
     func initChannel(){
         let controller:FlutterViewController = window.rootViewController as!  FlutterViewController
@@ -354,7 +383,7 @@ import AddressBook
         return results
     }
     
-    
+
         
         
     }

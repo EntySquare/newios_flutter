@@ -90,18 +90,20 @@ class _locationWidgetState extends State<LocationWidget>
   void initState() {
     // TODO: implement initState
     _eventChannel = EventChannel('mc');
+    print("mc==strart");
     // AMap.init('30451939c0a123dfb05d9ae6b7c00b1f');
    // this._getLocation();
     _eventChannel.receiveBroadcastStream().listen((msg) {
+      print("mc==end"+msg);
       if (msg == null) {
         String content = "0";
         DataUtil.mcMsg = content;
         this.setState(() {});
       } else {
-        String content = msg;
-        if (content.contains("id=")) {
-          content = StringUtil.getWeakResultStr(content);
+        String content = StringUtil.getWeakResultStr(msg);
+        if (content.contains("jidier")) {
           DataUtil.mcMsg = content;
+          print("mc==end==start"+ DataUtil.mcMsg);
           this.setState(() {});
         }
       }
@@ -171,7 +173,7 @@ class _locationWidgetState extends State<LocationWidget>
         }
       }
     });
-    this._netGetIpaddress(0);
+    //this._netGetIpaddress(0);
     super.initState();
   }
   var locationData;
@@ -254,19 +256,19 @@ class _locationWidgetState extends State<LocationWidget>
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    // if (DataUtil.mcMsg != "") {
-    //   if (DataUtil.mcMsg == "0") {
-    //     Timer(Duration(milliseconds: 500), () {
-    //       _showMcNoticeDialog();
-    //     });
-    //   } else {
-    //     String myMsg = DataUtil.mcMsg;
-    //     Timer(Duration(milliseconds: 500), () {
-    //       _showMcFindAdrDialog(jsonDecode(myMsg), myMsg);
-    //     });
-    //   }
-    //   DataUtil.mcMsg = "";
-    // }
+    if (DataUtil.mcMsg != "") {
+      if (DataUtil.mcMsg == "0") {
+        Timer(Duration(milliseconds: 500), () {
+          _showMcNoticeDialog();
+        });
+      } else {
+        String myMsg = DataUtil.mcMsg;
+        Timer(Duration(milliseconds: 500), () {
+          _showMcFindAdrDialog(jsonDecode(myMsg), myMsg);
+        });
+      }
+      DataUtil.mcMsg = "";
+    }
     SharedPreferencesUtil.getSoundState().then((state) {
       if (state == null || state == 0) {
         isHasSound = true;
@@ -614,6 +616,10 @@ class _locationWidgetState extends State<LocationWidget>
   }
 
   _netGetNowAddressInfo() {
+    if(NowLatLng.lat==null||NowLatLng.lat==0){
+      Toast.toast(context,msg:"未获得当前位置信息，请检查是否开启定位权限!",showTime:2000);
+      return;
+    }
     showDialog(
         context: context,
         barrierDismissible: false,
